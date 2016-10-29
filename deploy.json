@@ -1,0 +1,15 @@
+{
+  "type": "delphi deploy config",
+  "version": 1,
+  "actions": [
+    {
+      "type": "copy",
+      "src": "scripts/secrets.py",
+      "dst": "../secrets.py",
+      "replace-keywords": [
+        "../secrets.json"
+      ],
+      "add-header-comment": true
+    }
+  ]
+}
