@@ -4,8 +4,17 @@
   "actions": [
     {
       "type": "copy",
-      "src": "scripts/secrets.py",
+      "src": "secrets/secrets.py",
       "dst": "../secrets.py",
+      "replace-keywords": [
+        "../secrets.json"
+      ],
+      "add-header-comment": true
+    },
+    {
+      "type": "copy",
+      "src": "secrets/secrets.php",
+      "dst": "/var/www/html/secrets.php",
       "replace-keywords": [
         "../secrets.json"
       ],
