@@ -16,5 +16,9 @@ class Secrets {
     'sensors' => '{SECRET_API_AUTH_SENSORS}'
   );
 
+  public static $flucontest = array(
+    'hmac' => '{SECRET_FLUCONTEST_HMAC}'
+  );
+
 }
 ?>
