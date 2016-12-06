@@ -14,3 +14,7 @@ class api:
   stateili = '{SECRET_API_AUTH_STATEILI}'
   cdc = '{SECRET_API_AUTH_CDC}'
   sensors = '{SECRET_API_AUTH_SENSORS}'
+
+class flusight:
+  
+  login = ('{SECRET_FLUSIGHT_LOGIN_EMAIL}', '{SECRET_FLUSIGHT_LOGIN_PASSWORD}')
