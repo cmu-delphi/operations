@@ -15,6 +15,6 @@ class api:
   cdc = '{SECRET_API_AUTH_CDC}'
   sensors = '{SECRET_API_AUTH_SENSORS}'
 
-class flusight:
+class flucontest:
   
-  login = ('{SECRET_FLUSIGHT_LOGIN_EMAIL}', '{SECRET_FLUSIGHT_LOGIN_PASSWORD}')
+  flusight = ('{SECRET_FLUCONTEST_FLUSIGHT_EMAIL}', '{SECRET_FLUCONTEST_FLUSIGHT_PASSWORD}')
