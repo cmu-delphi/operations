@@ -17,4 +17,5 @@ class api:
 
 class flucontest:
   
+  owner = '{SECRET_FLUCONTEST_CONTACT}'
   flusight = ('{SECRET_FLUCONTEST_FLUSIGHT_EMAIL}', '{SECRET_FLUCONTEST_FLUSIGHT_PASSWORD}')
