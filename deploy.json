@@ -5,7 +5,6 @@
     {
       "type": "export",
       "src": "secrets/secrets.py",
-      "dst": "../secrets.py",
       "replace-keywords": [
         "../secrets.json"
       ],
