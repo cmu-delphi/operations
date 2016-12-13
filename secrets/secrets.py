@@ -15,9 +15,15 @@ class api:
   cdc = '{SECRET_API_AUTH_CDC}'
   sensors = '{SECRET_API_AUTH_SENSORS}'
 
+
 class flucontest:
-  
+
   email_maintainer = '{SECRET_FLUCONTEST_EMAIL_MAINTAINER}'
   email_delphi = '{SECRET_FLUCONTEST_EMAIL_DELPHI}'
   email_cdc = '{SECRET_FLUCONTEST_EMAIL_CDC}'
   flusight = ('{SECRET_FLUCONTEST_FLUSIGHT_EMAIL}', '{SECRET_FLUCONTEST_FLUSIGHT_PASSWORD}')
+
+
+class mailgun:
+
+  key = '{SECRET_MAILGUN_AUTH_KEY}'
