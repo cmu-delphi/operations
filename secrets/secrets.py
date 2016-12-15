@@ -18,9 +18,11 @@ class api:
 
 class flucontest:
 
+  debug_userid = '{SECRET_FLUCONTEST_DEBUG_USERID}'
   email_maintainer = '{SECRET_FLUCONTEST_EMAIL_MAINTAINER}'
   email_delphi = '{SECRET_FLUCONTEST_EMAIL_DELPHI}'
   email_cdc = '{SECRET_FLUCONTEST_EMAIL_CDC}'
+  email_epicast = '{SECRET_FLUCONTEST_EMAIL_EPICAST}'
   flusight = ('{SECRET_FLUCONTEST_FLUSIGHT_EMAIL}', '{SECRET_FLUCONTEST_FLUSIGHT_PASSWORD}')
 
 
