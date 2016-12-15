@@ -24,6 +24,7 @@
 
     "// imports",
     {"type": "import", "dst": "../operations/secrets.py"},
+    {"type": "import", "dst": "../operations/emailer.py"},
 
     "// sources",
     {
