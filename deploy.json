@@ -2,6 +2,8 @@
   "type": "delphi deploy config",
   "version": 1,
   "actions": [
+
+    "// distribute secrets",
     {
       "type": "export",
       "src": "secrets/secrets.py",
@@ -9,7 +11,8 @@
         "../secrets.json"
       ],
       "add-header-comment": true
-    },{
+    },
+    {
       "type": "copy",
       "src": "secrets/secrets.php",
       "dst": "/var/www/html/secrets.php",
@@ -17,6 +20,20 @@
         "../secrets.json"
       ],
       "add-header-comment": true
+    },
+
+    "// imports",
+    {"type": "import", "dst": "../operations/secrets.py"},
+
+    "// sources",
+    {
+      "type": "move",
+      "src": "src/",
+      "dst": "../operations/",
+      "match": "^(.+)(\\.py)$",
+      "add-header-comment": true
     }
+
+
   ]
 }
