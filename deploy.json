@@ -3,7 +3,7 @@
   "version": 1,
   "actions": [
 
-    "// distribute secrets",
+    "// exports",
     {
       "type": "export",
       "src": "secrets/secrets.py",
@@ -13,7 +13,18 @@
       "add-header-comment": true
     },
     {
-      "type": "copy",
+      "type": "export",
+      "src": "src/emailer.py",
+      "add-header-comment": true
+    },
+
+    "// imports",
+    {"type": "import", "dst": "../operations/secrets.py"},
+    {"type": "import", "dst": "../operations/emailer.py"},
+
+    "// web secrets",
+    {
+      "type": "move",
       "src": "secrets/secrets.php",
       "dst": "/var/www/html/secrets.php",
       "replace-keywords": [
@@ -22,16 +33,11 @@
       "add-header-comment": true
     },
 
-    "// imports",
-    {"type": "import", "dst": "../operations/secrets.py"},
-    {"type": "import", "dst": "../operations/emailer.py"},
-
-    "// sources",
+    "// backup script",
     {
       "type": "move",
-      "src": "src/",
-      "dst": "../operations/",
-      "match": "^(.+)(\\.py)$",
+      "src": "src/backup.py",
+      "dst": "../operations/backup.py",
       "add-header-comment": true
     }
 
