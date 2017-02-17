@@ -26,6 +26,16 @@ class flucontest:
   flusight = ('{SECRET_FLUCONTEST_FLUSIGHT_EMAIL}', '{SECRET_FLUCONTEST_FLUSIGHT_PASSWORD}')
 
 
+class healthtweets:
+
+  login = ('{SECRET_HEALTHTWEETS_USERNAME}', '{SECRET_HEALTHTWEETS_PASSWORD}')
+
+
+class googletrends:
+
+  apikey = '{SECRET_GOOGLE_TRENDS_API_KEY}'
+
+
 class mailgun:
 
   key = '{SECRET_MAILGUN_AUTH_KEY}'
