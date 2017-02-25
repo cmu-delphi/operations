@@ -20,5 +20,9 @@ class Secrets {
     'hmac' => '{SECRET_FLUCONTEST_HMAC}'
   );
 
+  public static $wiki = array(
+    'hmac' => '{SECRET_WIKI_HMAC}'
+  );
+
 }
 ?>
