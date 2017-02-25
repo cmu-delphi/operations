@@ -36,6 +36,11 @@ class googletrends:
   apikey = '{SECRET_GOOGLE_TRENDS_API_KEY}'
 
 
+class wiki:
+
+  hmac = '{SECRET_WIKI_HMAC}'
+
+
 class mailgun:
 
   key = '{SECRET_MAILGUN_AUTH_KEY}'
