@@ -6,6 +6,10 @@ class Secrets {
     'epi' => array('{SECRET_DB_USERNAME_EPI}', '{SECRET_DB_PASSWORD_EPI}')
   );
 
+  public static $epicast = array(
+    'captcha_key' => '{SECRET_EPICAST_CAPTCHA_KEY}'
+  );
+
   public static $api = array(
     'twitter' => '{SECRET_API_AUTH_TWITTER}',
     'ght' => '{SECRET_API_AUTH_GHT}',
