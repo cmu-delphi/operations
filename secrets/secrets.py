@@ -41,6 +41,11 @@ class wiki:
   hmac = '{SECRET_WIKI_HMAC}'
 
 
+class cdcp:
+
+  dropbox_token = '{SECRET_CDCP_DROPBOX_TOKEN}'
+
+
 class mailgun:
 
   key = '{SECRET_MAILGUN_AUTH_KEY}'
