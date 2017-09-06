@@ -49,3 +49,8 @@ class cdcp:
 class mailgun:
 
   key = '{SECRET_MAILGUN_AUTH_KEY}'
+
+
+class apache:
+
+  keys_dir = '{SECRET_APACHE_KEYS_DIR}'

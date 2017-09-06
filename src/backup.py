@@ -1,6 +1,7 @@
 import subprocess
 import datetime
 import os
+import os.path
 import time
 import secrets
 
@@ -10,20 +11,25 @@ tag = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
 print('Destination: %s | Tag: %s'%(dest, tag))
 
 #Directories
+keys_path, keys_name = os.path.split(secrets.apache.keys_dir)
 dirs = [
   {
     'label': 'auto',
     'path': '/home/automation',
     'name': 'driver',
     'exclude': 'flu_data',
-  },{
+  }, {
     'label': 'html',
     'path': '/var/www',
     'name': 'html',
-  },{
+  }, {
     'label': 'data',
     'path': '/home/automation/driver',
     'name': 'flu_data',
+  }, {
+    'label': 'keys',
+    'path': keys_path,
+    'name': keys_name,
   },
 ]
 
