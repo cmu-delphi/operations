@@ -6,7 +6,7 @@
     "// exports",
     {
       "type": "export",
-      "src": "secrets/secrets.py",
+      "src": "src/secrets.py",
       "replace-keywords": [
         "../secrets.json"
       ],
@@ -18,14 +18,10 @@
       "add-header-comment": true
     },
 
-    "// imports",
-    {"type": "import", "dst": "../operations/secrets.py"},
-    {"type": "import", "dst": "../operations/emailer.py"},
-
     "// web secrets",
     {
       "type": "move",
-      "src": "secrets/secrets.php",
+      "src": "src/secrets.php",
       "dst": "/var/www/html/secrets.php",
       "replace-keywords": [
         "../secrets.json"
@@ -33,14 +29,14 @@
       "add-header-comment": true
     },
 
-    "// backup script",
+    "// all python sources",
     {
       "type": "move",
-      "src": "src/backup.py",
-      "dst": "../operations/backup.py",
+      "src": "src/",
+      "dst": "../operations/",
+      "match": "^.*\\.(py)$",
       "add-header-comment": true
     }
-
 
   ]
 }
