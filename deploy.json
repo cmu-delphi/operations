@@ -8,15 +8,18 @@
       "type": "export",
       "src": "src/secrets.py",
       "replace-keywords": [
-        "../../secrets.json"
+        "../secrets.json"
       ],
       "add-header-comment": true
-    },
-    {
+    },{
       "type": "export",
       "src": "src/emailer.py",
       "add-header-comment": true
     },
+
+    "// imports",
+    {"type": "import", "dst": "../operations/secrets.py"},
+    {"type": "import", "dst": "../operations/emailer.py"},
 
     "// web secrets",
     {
@@ -29,12 +32,16 @@
       "add-header-comment": true
     },
 
-    "// all python sources",
+    "// other python sources",
     {
       "type": "move",
-      "src": "src/",
+      "src": "src/backup.py",
       "dst": "../operations/",
-      "match": "^.*\\.(py)$",
+      "add-header-comment": true
+    },{
+      "type": "move",
+      "src": "src/heart_monitor.py",
+      "dst": "../operations/",
       "add-header-comment": true
     }
 
