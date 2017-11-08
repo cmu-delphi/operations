@@ -17,12 +17,18 @@ A program used for sending emails through Automation.
   * checking in existing version
 """
 
-import mysql.connector
+# standard library
 import argparse
-import requests
 import base64
 import json
-import secrets
+
+# third party
+import mysql.connector
+import requests
+
+# first party
+import delphi.operations.secrets as secrets
+
 
 #Functions to encode and decode messages
 def encode(x):

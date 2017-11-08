@@ -1,9 +1,14 @@
-import subprocess
+"""Makes backups of Delphi files and databases."""
+
+# standard library
 import datetime
 import os
-import os.path
+import subprocess
 import time
-import secrets
+
+# first party
+import delphi.operations.secrets as secrets
+
 
 #General setup
 dest = '/home/automation/backups'

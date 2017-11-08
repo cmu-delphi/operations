@@ -1,3 +1,6 @@
+"""Contains various non-public strings."""
+
+
 class db:
 
   auto = ('{SECRET_DB_USERNAME_AUTO}', '{SECRET_DB_PASSWORD_AUTO}')

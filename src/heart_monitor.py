@@ -1,8 +1,15 @@
+"""Sends an email when Automations stops running."""
+
+# standard library
 import argparse
 import time
+
+# third party
 import mysql.connector
-from emailer import _send_email
-import secrets
+
+# first party
+from delphi.operations.emailer import _send_email
+import delphi.operations.secrets as secrets
 
 
 def check_heartbeat(name, timeout):

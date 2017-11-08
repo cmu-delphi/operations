@@ -3,29 +3,22 @@
   "version": 1,
   "actions": [
 
-    "// exports",
-    {
-      "type": "export",
-      "src": "src/secrets.py",
-      "replace-keywords": [
-        "../secrets.json"
-      ],
-      "add-header-comment": true
-    },{
-      "type": "export",
-      "src": "src/emailer.py",
-      "add-header-comment": true
-    },
-
-    "// imports",
-    {"type": "import", "dst": "../operations/secrets.py"},
-    {"type": "import", "dst": "../operations/emailer.py"},
-
     "// web secrets",
     {
       "type": "move",
       "src": "src/secrets.php",
-      "dst": "/var/www/html/secrets.php",
+      "dst": "/var/www/html/",
+      "replace-keywords": [
+        "../secrets.json"
+      ],
+      "add-header-comment": true
+    },
+
+    "// python secrets",
+    {
+      "type": "move",
+      "src": "src/secrets.py",
+      "dst": "../delphi/operations/",
       "replace-keywords": [
         "../secrets.json"
       ],
@@ -35,13 +28,9 @@
     "// other python sources",
     {
       "type": "move",
-      "src": "src/backup.py",
-      "dst": "../operations/",
-      "add-header-comment": true
-    },{
-      "type": "move",
-      "src": "src/heart_monitor.py",
-      "dst": "../operations/",
+      "src": "src/",
+      "dst": "../delphi/operations/",
+      "match": "^.*\\.py$",
       "add-header-comment": true
     }
 
