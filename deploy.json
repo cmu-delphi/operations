@@ -7,7 +7,7 @@
     {
       "type": "move",
       "src": "src/secrets.php",
-      "dst": "/var/www/html/",
+      "dst": "/var/www/html/secrets.php",
       "replace-keywords": [
         "../secrets.json"
       ],
@@ -18,7 +18,7 @@
     {
       "type": "move",
       "src": "src/secrets.py",
-      "dst": "../delphi/operations/",
+      "dst": "../delphi/operations/secrets.py",
       "replace-keywords": [
         "../secrets.json"
       ],
