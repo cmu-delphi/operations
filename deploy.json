@@ -14,7 +14,16 @@
       "add-header-comment": true
     },
 
-    "// python secrets",
+    "// python package",
+    {
+      "type": "copy",
+      "src": "src/",
+      "dst": "../delphi/operations/",
+      "match": "^.*\\.py$",
+      "add-header-comment": true
+    },
+
+    "// overwrite python secrets",
     {
       "type": "move",
       "src": "src/secrets.py",
@@ -23,16 +32,8 @@
         "../secrets.json"
       ],
       "add-header-comment": true
-    },
-
-    "// other python sources",
-    {
-      "type": "move",
-      "src": "src/",
-      "dst": "../delphi/operations/",
-      "match": "^.*\\.py$",
-      "add-header-comment": true
     }
+
 
   ]
 }
