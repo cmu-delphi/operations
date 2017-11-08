@@ -8,7 +8,7 @@
       "type": "export",
       "src": "src/secrets.py",
       "replace-keywords": [
-        "../secrets.json"
+        "../../secrets.json"
       ],
       "add-header-comment": true
     },
