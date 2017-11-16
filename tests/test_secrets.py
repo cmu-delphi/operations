@@ -8,6 +8,9 @@ import re
 import sys
 import unittest
 
+# first party
+from delphi.operations.environment import Environment
+
 # py3tester coverage target
 __test_target__ = 'delphi.operations.secrets'
 
@@ -40,8 +43,14 @@ class SanityChecks(unittest.TestCase):
     string_nodes = [get_elements(ast.Str, a) for a in assign_nodes]
     strings = [node.s for node in itertools.chain.from_iterable(string_nodes)]
 
-    # all strings should be placeholders
     pattern = re.compile('{SECRET_\\S+}')
-    for secret in strings:
-      with self.subTest(secret=secret):
-        self.assertIsNotNone(pattern.match(secret), 'secret may be exposed')
+    if Environment.is_prod():
+      # all strings should be substituted
+      for secret in strings:
+        with self.subTest(secret=secret):
+          self.assertIsNone(pattern.match(secret), 'secret may be unavailable')
+    else:
+      # all strings should be placeholders
+      for secret in strings:
+        with self.subTest(secret=secret):
+          self.assertIsNotNone(pattern.match(secret), 'secret may be exposed')
