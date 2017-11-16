@@ -5,6 +5,7 @@ import ast
 import inspect
 import itertools
 import re
+import sys
 import unittest
 
 # py3tester coverage target
@@ -28,8 +29,9 @@ class SanityChecks(unittest.TestCase):
     # there should be no functions...
     self.assertEqual(len(get_elements(ast.FunctionDef)), 0)
 
-    # ...nor async functions
-    self.assertEqual(len(get_elements(ast.AsyncFunctionDef)), 0)
+    if sys.version_info.major >= 3 and sys.version_info.minor >= 5:
+      # ...nor async functions
+      self.assertEqual(len(get_elements(ast.AsyncFunctionDef)), 0)
 
     # find all assignments
     assign_nodes = get_elements(ast.Assign)
