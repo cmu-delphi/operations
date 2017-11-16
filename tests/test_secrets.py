@@ -43,14 +43,13 @@ class SanityChecks(unittest.TestCase):
     string_nodes = [get_elements(ast.Str, a) for a in assign_nodes]
     strings = [node.s for node in itertools.chain.from_iterable(string_nodes)]
 
+    # check each secret
     pattern = re.compile('{SECRET_\\S+}')
-    if Environment.is_prod():
-      # all strings should be substituted
-      for secret in strings:
-        with self.subTest(secret=secret):
+    for secret in strings:
+      with self.subTest(secret=secret):
+        if Environment.is_prod():
+          # all strings should be substituted
           self.assertIsNone(pattern.match(secret), 'secret may be unavailable')
-    else:
-      # all strings should be placeholders
-      for secret in strings:
-        with self.subTest(secret=secret):
+        else:
+          # all strings should be placeholders
           self.assertIsNotNone(pattern.match(secret), 'secret may be exposed')
