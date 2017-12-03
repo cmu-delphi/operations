@@ -16,6 +16,7 @@ class api:
   ilinet = '{SECRET_API_AUTH_ILINET}'
   stateili = '{SECRET_API_AUTH_STATEILI}'
   cdc = '{SECRET_API_AUTH_CDC}'
+  quidel = '{SECRET_API_AUTH_QUIDEL}'
   sensors = '{SECRET_API_AUTH_SENSORS}'
 
 
@@ -57,3 +58,8 @@ class mailgun:
 class apache:
 
   keys_dir = '{SECRET_APACHE_KEYS_DIR}'
+
+class quidel:
+
+  email_addr = '{SECRET_QUIDEL_EMAIL_ID}'
+  email_pwd = '{SECRET_QUIDEL_EMAIL_PWD}'
