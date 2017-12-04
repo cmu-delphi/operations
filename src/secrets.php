@@ -17,6 +17,7 @@ class Secrets {
     'ilinet' => '{SECRET_API_AUTH_ILINET}',
     'stateili' => '{SECRET_API_AUTH_STATEILI}',
     'cdc' => '{SECRET_API_AUTH_CDC}',
+    'quidel' => '{SECRET_API_AUTH_QUIDEL}',
     'sensors' => '{SECRET_API_AUTH_SENSORS}'
   );
 
