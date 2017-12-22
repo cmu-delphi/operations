@@ -13,9 +13,7 @@ class Secrets {
   public static $api = array(
     'twitter' => '{SECRET_API_AUTH_TWITTER}',
     'ght' => '{SECRET_API_AUTH_GHT}',
-    'signals' => '{SECRET_API_AUTH_SIGNALS}',
-    'ilinet' => '{SECRET_API_AUTH_ILINET}',
-    'stateili' => '{SECRET_API_AUTH_STATEILI}',
+    'fluview' => '{SECRET_API_AUTH_FLUVIEW}',
     'cdc' => '{SECRET_API_AUTH_CDC}',
     'quidel' => '{SECRET_API_AUTH_QUIDEL}',
     'sensors' => '{SECRET_API_AUTH_SENSORS}'

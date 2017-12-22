@@ -12,9 +12,7 @@ class api:
 
   twitter = '{SECRET_API_AUTH_TWITTER}'
   ght = '{SECRET_API_AUTH_GHT}'
-  signals = '{SECRET_API_AUTH_SIGNALS}'
-  ilinet = '{SECRET_API_AUTH_ILINET}'
-  stateili = '{SECRET_API_AUTH_STATEILI}'
+  fluview = '{SECRET_API_AUTH_FLUVIEW}'
   cdc = '{SECRET_API_AUTH_CDC}'
   quidel = '{SECRET_API_AUTH_QUIDEL}'
   sensors = '{SECRET_API_AUTH_SENSORS}'
@@ -58,6 +56,7 @@ class mailgun:
 class apache:
 
   keys_dir = '{SECRET_APACHE_KEYS_DIR}'
+
 
 class quidel:
 

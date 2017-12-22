@@ -5,7 +5,6 @@ import ast
 import inspect
 import itertools
 import re
-import sys
 import unittest
 
 # first party
@@ -32,8 +31,8 @@ class SanityChecks(unittest.TestCase):
     # there should be no functions...
     self.assertEqual(len(get_elements(ast.FunctionDef)), 0)
 
-    if sys.version_info.major >= 3 and sys.version_info.minor >= 5:
-      # ...nor async functions
+    # ...nor async functions (python 3.5+)
+    if hasattr(ast, 'AsyncFunctionDef'):
       self.assertEqual(len(get_elements(ast.AsyncFunctionDef)), 0)
 
     # find all assignments
