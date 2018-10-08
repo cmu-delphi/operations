@@ -16,6 +16,7 @@ class Secrets {
     'fluview' => '{SECRET_API_AUTH_FLUVIEW}',
     'cdc' => '{SECRET_API_AUTH_CDC}',
     'quidel' => '{SECRET_API_AUTH_QUIDEL}',
+    'norostat' => '{SECRET_API_AUTH_NOROSTAT}',
     'sensors' => '{SECRET_API_AUTH_SENSORS}'
   );
 
