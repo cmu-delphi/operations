@@ -44,7 +44,7 @@ class UnitTests(unittest.TestCase):
     self.assertIsInstance(DiskUsageChecker.new_instance(), DiskUsageChecker)
 
   def test_check_all(self):
-    """Acquire a production-ready instance."""
+    """Test all combinations of usage scenarios."""
 
     with self.subTest(name='all under'):
       text, result = self.checker.check_all(97)
