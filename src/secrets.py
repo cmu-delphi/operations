@@ -17,6 +17,13 @@ class api:
   quidel = '{SECRET_API_AUTH_QUIDEL}'
   norostat = '{SECRET_API_AUTH_NOROSTAT}'
   sensors = '{SECRET_API_AUTH_SENSORS}'
+  class sensor_subsets:
+    twtr_sensor = '{SECRET_API_AUTH_TWTR_SENSOR}'
+    gft_sensor = '{SECRET_API_AUTH_GFT_SENSOR}'
+    ght_sensors = '{SECRET_API_AUTH_GHT_SENSORS}'
+    cdc_sensor = '{SECRET_API_AUTH_CDC_SENSOR}'
+    quidel_sensor = '{SECRET_API_AUTH_QUIDEL_SENSOR}'
+    arch_sensor = '{SECRET_API_AUTH_ARCH_SENSOR}'
 
 
 class flucontest:
