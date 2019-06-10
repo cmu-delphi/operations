@@ -23,7 +23,8 @@ class Secrets {
       'gft_sensor' => '{SECRET_API_AUTH_GFT_SENSOR}',
       'ght_sensors' => '{SECRET_API_AUTH_GHT_SENSORS}',
       'cdc_sensor' => '{SECRET_API_AUTH_CDC_SENSOR}',
-      'quidel_sensor' => '{SECRET_API_AUTH_QUIDEL_SENSOR}',
+      'quid_sensor' => '{SECRET_API_AUTH_QUID_SENSOR}',
+      'wiki_sensor' => '{SECRET_API_AUTH_WIKI_SENSOR}',
     ),
   );
 
