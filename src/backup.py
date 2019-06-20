@@ -90,7 +90,7 @@ for file in archives:
   os.remove('%s/%s'%(dest, file))
 
 #Send the backup to an external drive
-subprocess.check_call('cp -v %s /mnt/usb500g/backups/'%(final_archive), shell=True)
+subprocess.check_call('cp -v %s /mnt/usb2t/backups/'%(final_archive), shell=True)
 
 # TODO: Send the backup offsite
 
