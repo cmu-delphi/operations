@@ -17,6 +17,7 @@ class Secrets {
     'cdc' => '{SECRET_API_AUTH_CDC}',
     'quidel' => '{SECRET_API_AUTH_QUIDEL}',
     'norostat' => '{SECRET_API_AUTH_NOROSTAT}',
+    'afhsb' => '{SECRET_API_AUTH_AFHSB}',
     'sensors' => '{SECRET_API_AUTH_SENSORS}',
     'sensor_subsets' => array(
       'twtr_sensor' => '{SECRET_API_AUTH_TWTR_SENSOR}',

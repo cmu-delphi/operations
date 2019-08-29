@@ -16,6 +16,7 @@ class api:
   cdc = '{SECRET_API_AUTH_CDC}'
   quidel = '{SECRET_API_AUTH_QUIDEL}'
   norostat = '{SECRET_API_AUTH_NOROSTAT}'
+  afhsb = '{SECRET_API_AUTH_AFHSB}'
   sensors = '{SECRET_API_AUTH_SENSORS}'
   class sensor_subsets:
     twtr_sensor = '{SECRET_API_AUTH_TWTR_SENSOR}'
@@ -70,3 +71,4 @@ class quidel:
 
   email_addr = '{SECRET_QUIDEL_EMAIL_ID}'
   email_pwd = '{SECRET_QUIDEL_EMAIL_PWD}'
+
