@@ -1,0 +1,15 @@
+beautifulsoup4
+dropbox
+google-api-python-client
+lxml
+matplotlib
+mysql-connector
+numpy
+pandas
+pycountry
+requests
+sas7bdat
+scikit-learn
+scipy
+selenium
+xlrd
