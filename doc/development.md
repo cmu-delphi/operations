@@ -286,7 +286,7 @@ Unit:
 ```
 
 Finally, you can run _all_ Delphi tests by not specifying any particular repo.
-This make take some time (which is one reason why tests should be lightweight).
+This may take some time (which is one reason why tests should be lightweight).
 
 ```bash
 docker run --rm delphi_img python3 -m undefx.py3tester.py3tester --color repos/delphi
