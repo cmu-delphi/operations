@@ -9,3 +9,4 @@ development resources, including the following documentation for Delphi
 developers:
 
 - [backend development guide](docs/backend_development.md)
+- [frontend development guide](docs/frontend_development.md)

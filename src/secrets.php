@@ -1,4 +1,15 @@
 <?php
+
+/*
+This file is a template for the actual `secrets.php` used by various Delphi
+frontends.
+
+The "secret" values in this file are automatically replaced with production
+credentials at deploy time.
+
+This file needs to be kept in sync with `dev/docker/web/assets/secrets.php`.
+*/
+
 class Secrets {
 
   public static $db = array(
