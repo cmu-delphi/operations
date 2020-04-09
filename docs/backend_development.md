@@ -1,4 +1,4 @@
-delphi_python# Backend Development Guide
+# Backend Development Guide
 
 **Prerequisites:** none. This is a good place to start!
 
