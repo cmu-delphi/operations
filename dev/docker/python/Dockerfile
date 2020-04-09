@@ -8,12 +8,12 @@ RUN ln -s -f /usr/share/zoneinfo/America/New_York /etc/localtime
 WORKDIR /usr/src/app
 
 # install python packages
-COPY assets/requirements.txt .
+COPY repos/delphi/operations/dev/docker/python/assets/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # copy over all source files
 COPY repos repos
 
 # configure the image to match the delphi server
-COPY assets/setup.sh .
+COPY repos/delphi/operations/dev/docker/python/assets/setup.sh .
 RUN bash setup.sh

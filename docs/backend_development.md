@@ -1,10 +1,10 @@
-# Delphi Developer Guide
+delphi_python# Backend Development Guide
 
-Welcome! This guide is written to help you develop for Delphi. For first-time
-setup, see [the setup section](#setup). Otherwise, for an overview of a typical
-workflow, skip ahead to [the workflow section](#workflow).
+**Prerequisites:** none. This is a good place to start!
 
-_This guide is focused on python development under linux._
+This guide is written to help you develop backend Python code for Delphi. For
+first-time setup, see [the setup section](#setup). Otherwise, for an overview
+of a typical workflow, skip ahead to [the workflow section](#workflow).
 
 ## setup
 
@@ -102,12 +102,6 @@ cd ..
 cd ..
 ```
 
-Link the docker build files into the root of the workspace.
-
-```bash
-ln -s repos/delphi/operations/dev/docker/delphi_img/* .
-```
-
 Your workspace should now look like this:
 
 ```bash
@@ -116,8 +110,6 @@ tree -L 3 .
 
 ```
 .
-├── assets -> repos/delphi/operations/dev/docker/delphi_img/assets
-├── Dockerfile -> repos/delphi/operations/dev/docker/delphi_img/Dockerfile
 └── repos
     ├── delphi
     │   ├── delphi-epidata
@@ -129,8 +121,6 @@ tree -L 3 .
     └── undefx
         ├── py3tester
         └── undef-analysis
-
-12 directories, 1 file
 ```
 
 ## workflow
@@ -155,27 +145,27 @@ While unit testing in general is outside the scope of this document, here are
 some highlights:
 
 - For the general pattern to follow, see existing unit tests in other delphi
-repos. In a nutshell:
+  repos. In a nutshell:
   - there is one test file per source file, named like "test_[name].py"
   - test files live in a directory structure under `tests/` that exactly
-  mirrors the sources in `src/`
+    mirrors the sources in `src/`
   - the fully-qualified module name of the file to be tested is given in the
-  unit test, as this is required to assess code coverage
+    unit test, as this is required to assess code coverage
   - unit test classes must extend python's built-in unit test class
   - individual test functions must be named with a leading "test_" and should
-  contain a descriptive phrase (e.g. "test_fetch_data_handles_http404")
+    contain a descriptive phrase (e.g. "test_fetch_data_handles_http404")
 - In terms of line coverage, a commonly quoted rule of thumb is to aim for
-80% coverage.
+  80% coverage.
 - Tests should be reasonably well documented. This aids in debugging failing
-tests and helps curb the urge under pressure to simply delete failing tests.
+  tests and helps curb the urge under pressure to simply delete failing tests.
 - Tests should be deterministic. One of the most obvious sources of
-nondeterminism is a random number generator. More subtle (and insidious)
-sources of nondeterminism include conversion of unordered collections to
-ordered collections and operations involving timing.
+  nondeterminism is a random number generator. More subtle (and insidious)
+  sources of nondeterminism include conversion of unordered collections to
+  ordered collections and operations involving timing.
 - Tests should be lightweight, not involving I/O. Best practice is to avoid
-network and database operations, instead replacing those things with stand-in
-fakes that are under direct control of the test. This helps tests remain
-deterministic and fast.
+  network and database operations, instead replacing those things with stand-in
+  fakes that are under direct control of the test. This helps tests remain
+  deterministic and fast.
 
 **For new code and modifications to existing code, unit tests are considered
 required by default, unless deemed otherwise during code review.** For untested
@@ -183,19 +173,32 @@ legacy code, it is recommended to add tests opportunistically. All tests must
 pass in the master git branch, otherwise automatic deployment to the Delphi
 server will (intentionally) fail.
 
+Note that prefixing test file and method names with "test_" is more than just
+convention. It's required for
+[test discovery](https://docs.python.org/3/library/unittest.html#test-discovery).
+Tests not named this way won't be run without specific, additional action.
+
 ### creating an image
 
-To create the image, simply run the `docker build` command in the root of your
+To create the image, run the `docker build` command in the root of your
 workspace:
 
 ```bash
-docker build -t delphi_img .
+docker build -t delphi_python \
+  -f repos/delphi/operations/dev/docker/python/Dockerfile .
 ```
+
+The `-f` option tells the Docker engine how to build the image, the `-t` option
+tells the Docker engine what to name ("tag") the image, and the trailing `.`
+means that any files in and under the current directory are allowed to be
+included in the image (the "build context").
 
 It may take a few minutes to build the image for the first time as a large
 number of packages need to be installed. This installation happens in an
 intermediate image, which is cached and reused. Subsequent builds (e.g. when
-iterating on coding and testing) should be very fast.
+iterating on coding and testing) should be very fast. More details about build
+caching can be found in
+[the Docker documentation](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#leverage-build-cache).
 
 In addition to a success message at the end of the command output, you can
 verify that the image was built by using the `docker images` command:
@@ -205,8 +208,8 @@ docker images
 ```
 
 ```
-REPOSITORY             TAG                 IMAGE ID            CREATED             SIZE
-delphi_img             latest              764f9ebf827d        4 minutes ago       1.28GB
+REPOSITORY                TAG                 IMAGE ID            CREATED              SIZE
+delphi_python             latest              795ce0fe60c6        About a minute ago   1.28GB
 ```
 
 ### running a container
@@ -227,13 +230,13 @@ A container can be launched with the `docker run` command. For example, here's
 how to show the usage information for the test driver:
 
 ```bash
-docker run --rm delphi_img python3 -m undefx.py3tester.py3tester --help
+docker run --rm delphi_python python3 -m undefx.py3tester.py3tester --help
 ```
 
 For clarity, here's the anatomy of the above command:
 
-- `docker run [options] delphi_img` means we're instantiating a container from
-the latest version of the `delphi_img` image
+- `docker run [options] delphi_python` means we're instantiating a container from
+the latest version of the `delphi_python` image
   - `--rm` tells the docker engine to _not_ persist container state, as
 discussed above
 - `python3 [options]` runs the executable `python3` that's located _inside the
@@ -243,25 +246,34 @@ image_ (i.e. not your personal version in e.g. `/usr/bin`)
   - `--help` is a flag that our program knows how to handle, which it does by
   printing usage information
 
-Unit tests are run by passing options and a path to the `py3tester` script in
+Unit tests are run by passing options and a path to the `py3tester` module in
 the container. For example, here's how to run all unit tests recursively in the
 `nowcast` repo:
 
 ```bash
-docker run --rm delphi_img python3 -m undefx.py3tester.py3tester --color repos/delphi/nowcast/tests
+docker run --rm delphi_python \
+  python3 -m undefx.py3tester.py3tester --color repos/delphi/nowcast/tests
 ```
 
 ```
 [lots of output omitted for brevity]
 
-✔ All tests passed! 59% (795/1334) coverage.
+✔ All 81 tests passed! 59% (795/1334) coverage.
 ```
 
+The coverage figure quoted above is a bit optimistic. While the numerator
+accurately indicates the number of lines covered by tests, the denominator only
+accounts for lines _in files that are tested_. There may be many files that
+aren't tested at all, and lines from those files won't be included in the
+coverage denominator.
+
 The following command shows how to run tests in just a single file, and it also
-generates a full line-by-line coverage report (flag `--full`):
+generates a full line-by-line coverage and timing report (flag `--full`):
 
 ```bash
-docker run --rm delphi_img python3 -m undefx.py3tester.py3tester --color --full repos/delphi/nowcast/tests/fusion/test_fusion.py
+docker run --rm delphi_python \
+  python3 -m undefx.py3tester.py3tester --color --full \
+    repos/delphi/nowcast/tests/fusion/test_fusion.py
 ```
 
 ```
@@ -280,26 +292,29 @@ Unit:
   skip: 0
   pass: 5
 
-[coverage map omitted for brevity]
+[coverage and timing omitted for brevity]
 
-✔ All tests passed! 100% (14/14) coverage.
+✔ All 5 tests passed! 100% (68/68) coverage.
 ```
 
-Finally, you can run _all_ Delphi tests by not specifying any particular repo.
-This may take some time (which is one reason why tests should be lightweight).
+By convention, unit tests live under a top-level `tests/` directory in each
+relevant repo. Similarly, integration tests live under a top-level
+`integrations/` directly. Because the test runner searches for tests (files
+named like "test_*.py") recursively, it's easy to unintentionally include
+_integration_ tests when you only want to run _unit_ tests, and vice versa. To
+avoid this, always explicitly run tests in either the `tests/` directory or the
+`integrations/` directory.
+
+### housekeeping
+
+As you iterate by repeatedly building images and running containers, unused
+images and container state may accumulate. You can free up some space by
+removing those unused artifacts. Here's one way to do that:
 
 ```bash
-docker run --rm delphi_img python3 -m undefx.py3tester.py3tester --color repos/delphi
-```
+# remove unused container state
+docker ps -aq --no-trunc -f status=exited | xargs docker rm
 
+# remove unused images
+docker images -f "dangling=true" -q | xargs docker rmi
 ```
-[tons of output omitted for brevity]
-
-✔ All tests passed! 56% (1346/2395) coverage.
-```
-
-One last aside: the coverage figure quoted above is a bit optimistic. While the
-numerator accurately indicates that 1346 lines are covered by tests, the
-denominator only accounts for the 2395 total lines _in files that are tested_.
-There are unfortunately many files that aren't tested at all, and those lines
-don't show up in the coverage denominator.

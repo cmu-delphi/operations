@@ -4,6 +4,9 @@
 # About
 Essential resources for Delphi's operations.
 
-In addition to critical automation infrastructure, this repo also contains
-[Delphi's developer guide](doc/development.md) along with supporting Docker
-configuration.
+In addition to critical automation infrastructure, this repo contains common
+development resources, including the following documentation for Delphi
+developers:
+
+- [backend development guide](docs/backend_development.md)
+- [frontend development guide](docs/frontend_development.md)
