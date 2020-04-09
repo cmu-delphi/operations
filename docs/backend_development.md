@@ -174,8 +174,8 @@ pass in the master git branch, otherwise automatic deployment to the Delphi
 server will (intentionally) fail.
 
 Note that prefixing test file and method names with "test_" is more than just
-convention. It's required for [test
-discovery](https://docs.python.org/3/library/unittest.html#test-discovery).
+convention. It's required for
+[test discovery](https://docs.python.org/3/library/unittest.html#test-discovery).
 Tests not named this way won't be run without specific, additional action.
 
 ### creating an image
@@ -197,8 +197,8 @@ It may take a few minutes to build the image for the first time as a large
 number of packages need to be installed. This installation happens in an
 intermediate image, which is cached and reused. Subsequent builds (e.g. when
 iterating on coding and testing) should be very fast. More details about build
-caching can be found in [the Docker
-documentation](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#leverage-build-cache).
+caching can be found in
+[the Docker documentation](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#leverage-build-cache).
 
 In addition to a success message at the end of the command output, you can
 verify that the image was built by using the `docker images` command:
