@@ -8,4 +8,4 @@ In addition to critical automation infrastructure, this repo contains common
 development resources, including the following documentation for Delphi
 developers:
 
-- [backend development guide](doc/backend_development.md)
+- [backend development guide](docs/backend_development.md)
