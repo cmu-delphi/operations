@@ -3,6 +3,7 @@
 
 class db:
 
+  host = '{SECRET_DB_HOST}'
   auto = ('{SECRET_DB_USERNAME_AUTO}', '{SECRET_DB_PASSWORD_AUTO}')
   backup = ('{SECRET_DB_USERNAME_BACKUP}', '{SECRET_DB_PASSWORD_BACKUP}')
   epi = ('{SECRET_DB_USERNAME_EPI}', '{SECRET_DB_PASSWORD_EPI}')
@@ -18,7 +19,9 @@ class api:
   norostat = '{SECRET_API_AUTH_NOROSTAT}'
   afhsb = '{SECRET_API_AUTH_AFHSB}'
   sensors = '{SECRET_API_AUTH_SENSORS}'
+
   class sensor_subsets:
+
     twtr_sensor = '{SECRET_API_AUTH_TWTR_SENSOR}'
     gft_sensor = '{SECRET_API_AUTH_GFT_SENSOR}'
     ght_sensors = '{SECRET_API_AUTH_GHT_SENSORS}'
@@ -71,4 +74,3 @@ class quidel:
 
   email_addr = '{SECRET_QUIDEL_EMAIL_ID}'
   email_pwd = '{SECRET_QUIDEL_EMAIL_PWD}'
-
