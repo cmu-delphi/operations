@@ -23,13 +23,23 @@
       "add-header-comment": true
     },
 
-    "// overwrite python secrets",
+    "// python secrets for things running on midas",
     {
-      "type": "move",
+      "type": "copy",
       "src": "src/secrets.py",
       "dst": "../delphi/operations/secrets.py",
       "replace-keywords": [
         "../secrets.json"
+      ],
+      "add-header-comment": true
+    },
+    "// python secrets for deploying repos outside of midas",
+    {
+      "type": "copy",
+      "src": "src/secrets.py",
+      "dst": "../delphi/operations/secrets_deployment.py",
+      "replace-keywords": [
+        "../secrets_deployment.json"
       ],
       "add-header-comment": true
     },
