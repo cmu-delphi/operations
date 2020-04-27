@@ -143,7 +143,7 @@ working as intended. However, it can be very tedious. After development is
 finished, integration tests should be written and added to the project. This
 ensures that future developers can quickly and easily repeat your tests without
 having to follow a detailed step-by-step guide, which is both wasteful of time
-error-prone.
+and error-prone.
 
 Manual testing is ad hoc by nature. The integration tests for the particular
 piece of code you're working on often don't yet exist, and so the only way to

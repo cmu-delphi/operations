@@ -299,7 +299,7 @@ Unit:
 
 By convention, unit tests live under a top-level `tests/` directory in each
 relevant repo. Similarly, integration tests live under a top-level
-`integrations/` directly. Because the test runner searches for tests (files
+`integrations/` directory. Because the test runner searches for tests (files
 named like "test_*.py") recursively, it's easy to unintentionally include
 _integration_ tests when you only want to run _unit_ tests, and vice versa. To
 avoid this, always explicitly run tests in either the `tests/` directory or the
