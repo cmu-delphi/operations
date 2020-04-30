@@ -37,9 +37,9 @@
     {
       "type": "copy",
       "src": "src/secrets.py",
-      "dst": "../delphi/operations/secrets_deployment.py",
+      "dst": "../delphi/operations/secrets_campus.py",
       "replace-keywords": [
-        "../secrets_deployment.json"
+        "../secrets_campus.json"
       ],
       "add-header-comment": true
     },
