@@ -16,7 +16,6 @@ tag = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
 print('Destination: %s | Tag: %s'%(dest, tag))
 
 #Directories
-keys_path, keys_name = os.path.split(secrets.apache.keys_dir)
 dirs = [
   {
     'label': 'auto',
@@ -24,19 +23,24 @@ dirs = [
     'name': 'driver',
     'exclude': 'flu_data',
   }, {
-    'label': 'html',
-    'path': '/var/www',
-    'name': 'html',
-  }, {
     'label': 'data',
     'path': '/home/automation/driver',
     'name': 'flu_data',
-  }, {
-    'label': 'keys',
-    'path': keys_path,
-    'name': keys_name,
   },
 ]
+
+# previously backed-up paths
+# keys_path, keys_name = os.path.split(secrets.apache.keys_dir)
+# {
+#   'label': 'html',
+#   'path': '/var/www',
+#   'name': 'html',
+# },
+# {
+#   'label': 'keys',
+#   'path': keys_path,
+#   'name': keys_name,
+# },
 
 #Databases
 dbs = [
@@ -89,8 +93,8 @@ print(' %s'%(get_size(file)))
 for file in archives:
   os.remove('%s/%s'%(dest, file))
 
-#Send the backup to an external drive
-subprocess.check_call('cp -v %s /mnt/usb2t/backups/'%(final_archive), shell=True)
+# TODO: Send the backup to an external drive
+# subprocess.check_call('cp -v %s /mnt/usb2t/backups/'%(final_archive), shell=True)
 
 # TODO: Send the backup offsite
 
