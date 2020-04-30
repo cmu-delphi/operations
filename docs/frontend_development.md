@@ -21,8 +21,11 @@ committing untested code accompanied by testing in production. Here, you'll
 learn the basics of how to spin up a local instance of Delphi's serving stack
 and run integration tests against that stack.
 
-A much more in-depth guide to frontend development is available for the
-[Epidata API](https://github.com/cmu-delphi/delphi-epidata/blob/master/docs/epidata_development.md).
+After reading this guide, much more in-depth guides to frontend development are
+available for the
+[Epidata API](https://github.com/cmu-delphi/delphi-epidata/blob/master/docs/epidata_development.md)
+and for
+[Crowdcast (aka Epicast)](https://github.com/cmu-delphi/www-epicast/blob/master/docs/epicast_development.md).
 
 # setup
 
