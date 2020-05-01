@@ -127,17 +127,17 @@ if __name__ == '__main__':
     if args.verbose: print(' [%s] %s -> %s "%s" (%d)'%(email['id'], email['from'], email['to'], email['subject'], len(email['body'])))
     if args.test: continue
     #Sending in progress
-    update.execute('UPDATE email_queue SET `status` = 2, `priority` = UNIX_TIMESTAMP(NOW()) WHERE `id` = %s'%(email['id']))
+    update.execute('UPDATE email_queue SET `status` = 2, `timestamp` = UNIX_TIMESTAMP(NOW()) WHERE `id` = %s'%(email['id']))
     cnx.commit()
     #Send
     success = _send_email(email['from'], email['to'], email['subject'], email['body'])
     #Success or failure
     if success:
       if args.verbose: print(' Success')
-      update.execute('UPDATE email_queue SET `status` = 1, `priority` = UNIX_TIMESTAMP(NOW()) WHERE `id` = %s'%(email['id']))
+      update.execute('UPDATE email_queue SET `status` = 1, `timestamp` = UNIX_TIMESTAMP(NOW()) WHERE `id` = %s'%(email['id']))
     else:
       if args.verbose: print(' Failure')
-      update.execute('UPDATE email_queue SET `status` = 3, `priority` = UNIX_TIMESTAMP(NOW()) WHERE `id` = %s'%(email['id']))
+      update.execute('UPDATE email_queue SET `status` = 3, `timestamp` = UNIX_TIMESTAMP(NOW()) WHERE `id` = %s'%(email['id']))
     cnx.commit()
 
   #Cleanup
