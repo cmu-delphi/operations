@@ -1,21 +1,4 @@
-"""
-===============
-=== Purpose ===
-===============
-
-A program used for sending emails through Automation.
-
-
-=================
-=== Changelog ===
-=================
-
-2016-12-14
-  + more secrets
-2016-12-12
-  + use secrets
-  * checking in existing version
-"""
+"""A program used for sending emails through Automation."""
 
 # standard library
 import argparse
