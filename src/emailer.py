@@ -25,7 +25,7 @@ def _connect():
   return mysql.connector.connect(user=u, password=p, database='automation')
 
 #Add an email to the database queue
-def queue_email(to, subject, text, cc=None, bcc=None, html=None, attachments=None):
+def queue_email(to, subject, text, cc=None, bcc=None, html=None, attachments=None, priority=1):
   #Build the body data string
   data = {'text': text}
   if cc is not None:
@@ -42,7 +42,7 @@ def queue_email(to, subject, text, cc=None, bcc=None, html=None, attachments=Non
   #Connect, queue, commit, and disconnect
   cnx = _connect()
   cur = cnx.cursor()
-  cur.execute("INSERT INTO email_queue (`from`, `to`, `subject`, `body`) VALUES ('%s','%s','%s','%s')"%(secrets.flucontest.email_epicast, to, subject, body))
+  cur.execute("INSERT INTO email_queue (`from`, `to`, `subject`, `body`, `priority`, `timestamp`) VALUES ('%s','%s','%s','%s',%f,UNIX_TIMESTAMP(NOW()))"%(secrets.flucontest.email_epicast, to, subject, body, priority))
   cnx.commit()
   cur.close()
   cnx.close()
@@ -99,6 +99,7 @@ if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument('-v', '--verbose', action='store_const', const=True, default=False, help="show extra output")
   parser.add_argument('-t', '--test', action='store_const', const=True, default=False, help="test run only, don't send emails or update the database")
+  parser.add_argument('--limit', type=int, default=100, help="maximum number of emails to send (default 100)")
   args = parser.parse_args()
 
   #DB connection
@@ -109,7 +110,7 @@ if __name__ == '__main__':
   if args.verbose: print('Connected successfully')
 
   #Get the list of emails
-  select.execute('SELECT `id`, `from`, `to`, `subject`, `body` FROM `email_queue` WHERE `status` = 0')
+  select.execute('SELECT `id`, `from`, `to`, `subject`, `body` FROM `email_queue` WHERE `status` = 0 ORDER BY `priority` DESC LIMIT %d' % args.limit)
   emails = []
   for (email_id, email_from, email_to, email_subject, email_body) in select:
     emails.append({
@@ -126,17 +127,17 @@ if __name__ == '__main__':
     if args.verbose: print(' [%s] %s -> %s "%s" (%d)'%(email['id'], email['from'], email['to'], email['subject'], len(email['body'])))
     if args.test: continue
     #Sending in progress
-    update.execute('UPDATE email_queue SET status = 2 WHERE id = %s'%(email['id']))
+    update.execute('UPDATE email_queue SET `status` = 2, `priority` = UNIX_TIMESTAMP(NOW()) WHERE `id` = %s'%(email['id']))
     cnx.commit()
     #Send
     success = _send_email(email['from'], email['to'], email['subject'], email['body'])
     #Success or failure
     if success:
       if args.verbose: print(' Success')
-      update.execute('UPDATE email_queue SET status = 1 WHERE id = %s'%(email['id']))
+      update.execute('UPDATE email_queue SET `status` = 1, `priority` = UNIX_TIMESTAMP(NOW()) WHERE `id` = %s'%(email['id']))
     else:
       if args.verbose: print(' Failure')
-      update.execute('UPDATE email_queue SET status = 3 WHERE id = %s'%(email['id']))
+      update.execute('UPDATE email_queue SET `status` = 3, `priority` = UNIX_TIMESTAMP(NOW()) WHERE `id` = %s'%(email['id']))
     cnx.commit()
 
   #Cleanup
