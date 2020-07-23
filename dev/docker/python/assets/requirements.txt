@@ -1,5 +1,6 @@
 beautifulsoup4
 dropbox
+epiweeks
 google-api-python-client
 lxml
 matplotlib
