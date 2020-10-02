@@ -14,3 +14,4 @@ RUN sed -i $PHP_INI_DIR/php.ini -e 's/^;date.timezone =$/date.timezone = "Americ
 
 # deploy development secrets (see `operations/deploy.json`)
 COPY repos/delphi/operations/dev/docker/web/assets/secrets.php /var/www/html/
+RUN chmod o+r /var/www/html/secrets.php
