@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # copy over all source files
 COPY repos repos
-RUN chmod -R o+r repo/
+RUN chmod -R o+r repos/
 
 # configure the image to match the delphi server
 COPY repos/delphi/operations/dev/docker/python/assets/setup.sh .
