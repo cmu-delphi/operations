@@ -1,5 +1,5 @@
 # start with a standard python 3 image
-FROM python:3
+FROM python:3.8-buster
 
 # use delphi's timezome
 RUN ln -s -f /usr/share/zoneinfo/America/New_York /etc/localtime
