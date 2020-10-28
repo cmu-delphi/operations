@@ -1,4 +1,5 @@
 beautifulsoup4
+docker
 dropbox
 epiweeks
 google-api-python-client
