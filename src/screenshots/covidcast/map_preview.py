@@ -15,49 +15,92 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium import webdriver
 
 # first party
+from delphi.epidata.client.delphi_epidata import Epidata
 from delphi.operations.screenshots.utils import Utils
+
+
+class MapPreviewException(Exception):
+  """Raised for exceptions specific to the `MapPreview` class."""
 
 
 class MapPreview:
 
-  # URL of the COVIDcast map with predetermined signals
-  URL = 'https://covidcast.cmu.edu/?' + urllib.parse.urlencode({
-    'sensor': 'doctor-visits-smoothed_adj_cli',
-    'level': 'county',
-    'date': '20200918',
-    'signalType': 'value',
-    'encoding': 'color',
-    'mode': 'overview',
-    'region': '42003',
-  })
+  # URL of the COVIDcast map
+  BASE_URL = 'https://covidcast.cmu.edu/'
 
-  # width and height in pixels of the final screenshot
-  SCREENSHOT_SIZE = (1800, 900)
+  # Horizontal and vertical padding, in pixels, required to accomodate a
+  # screenshot of a given size, accounting for extraneous UI elements.
+  SCREEN_PADDING = (0, 311)
 
-  # width and height in pixels of the virtual screen needed to capture a
-  # screenshot of the desired size (e.g. to allow room for surrounding UI
-  # elements, window borders, etc)
-  SCREEN_SIZE = (SCREENSHOT_SIZE[0], SCREENSHOT_SIZE[1] + 311)
+  def get_most_recent_date(
+      source, signal, geo_type, geo_value, epidata_impl=Epidata):
+    """Get the date of most recently available data for a given signal.
 
-  # location of the center of Allegheny county in pixels relative to the
-  # top-left corner of the map
-  ALLEGHENY_COUNTY_LOCATION = (1077, 372)
+    Parameters
+    ----------
+    source : str
+        COVIDcast data source.
+    signal : str
+        COVIDcast signal name.
+    geo_type : str
+        COVIDcast geographic resolution.
+    geo_value : str
+        COVIDcast location name.
 
-  def take_screenshot(driver, path, time_impl=time, webdriver_impl=webdriver):
+    Returns
+    -------
+    str
+        Date of most recent data in YYYYMMDD format.
+
+    Raises
+    ------
+    MapPreviewException
+        If there is no data for the signal.
+    """
+
+    # Query `covidcast` directly because `covidcast_meta` aggregates over all
+    # locations, and the given location may not have data as recent as some
+    # other location for the same signal.
+    date_range = Epidata.range(20200101, 20500101)
+    response = epidata_impl.covidcast(
+        source, signal, 'day', geo_type, date_range, geo_value)
+    if response['result'] != 1:
+      raise MapPreviewException(
+          f'unable to get most recent date for {source} {signal}')
+
+    most_recent = max(row['time_value'] for row in response['epidata'])
+    return str(most_recent)
+
+  def take_screenshot(
+      driver, args, resolved_date, time_impl=time, webdriver_impl=webdriver):
     """Take a screenshot of the COVIDcast map.
 
     Parameters
     ----------
     driver : selenium.webdriver.remote.webdriver
         A webdriver instance, which is already connected to a selenium server.
-    path : str
-        The absolute path of the file where the screenshot is rendered.
+    args : argparse.Namespace
+        Command-line arguments.
+    resolved_date : str
+        Date of the signal in YYYYMMDD format.
+
+    Raises
+    ------
+    MapPreviewException
+        If interaction with the webpage fails.
     """
 
-    print(f'navigating to {MapPreview.URL}')
-    driver.get(MapPreview.URL)
+    URL = MapPreview.BASE_URL + '?' + urllib.parse.urlencode({
+      'sensor': f'{args.source}-{args.signal}',
+      'level': args.geo_type,
+      'region': args.geo_value,
+      'date': resolved_date,
+    })
+
+    print(f'navigating to {URL}')
+    driver.get(URL)
     if 'COVIDcast' not in driver.title:
-      raise Exception(f'unexpected title ({driver.title})')
+      raise MapPreviewException(f'unexpected title ({driver.title})')
 
     def is_loading(document):
       spinners = document.find_elements_by_class_name('loading-bg')
@@ -83,14 +126,15 @@ class MapPreview:
     # allow time for the animation to complete
     time_impl.sleep(5)
 
-    print('hovering allegheny county')
+    hover_location = (args.hover_x, args.hover_y)
+    print(f'hovering mouse at {hover_location}')
     webdriver_impl.ActionChains(driver).move_to_element_with_offset(
-        root, *MapPreview.ALLEGHENY_COUNTY_LOCATION).perform()
+        root, *hover_location).perform()
     # allow time for the county info popup to appear
     time_impl.sleep(1)
 
-    print(f'rendering screenshot at {path}')
-    root.screenshot(path)
+    print(f'rendering screenshot at {args.path}')
+    root.screenshot(args.path)
 
   def get_argument_parser():
     """Define command line arguments and usage.
@@ -107,21 +151,84 @@ class MapPreview:
         type=str,
         required=True,
         help='absolute path of generated screenshot (e.g. /path/name.png)')
+    parser.add_argument(
+        '--source',
+        type=str,
+        default='doctor-visits',
+        help='COVIDcast data source (default \'doctor-visits\')')
+    parser.add_argument(
+        '--signal',
+        type=str,
+        default='smoothed_adj_cli',
+        help='COVIDcast signal name (default \'smoothed_adj_cli\')')
+    parser.add_argument(
+        '--geo_type',
+        type=str,
+        default='county',
+        help='COVIDcast geographic resolution (default \'county\')')
+    parser.add_argument(
+        '--geo_value',
+        type=str,
+        default='42003',
+        help='COVIDcast location name (default \'42003\')')
+    parser.add_argument(
+        '--date',
+        type=str,
+        help=(
+          'date of the signal in YYYYMMDD format; if unspecified, use the '
+          'most recent date for the signal'
+        ))
+    parser.add_argument(
+        '--width',
+        type=int,
+        default=1800,
+        help='width of the screenshot, in pixels (default 1800)')
+    parser.add_argument(
+        '--height',
+        type=int,
+        default=900,
+        help='height of the screenshot, in pixels (default 900)')
+    parser.add_argument(
+        '--hover_x',
+        type=int,
+        default=0,
+        help=(
+          'horizontal location to mouse hover, '
+          'in pixels relative to top-left (default 0)'
+        ))
+    parser.add_argument(
+        '--hover_y',
+        type=int,
+        default=0,
+        help=(
+          'vertical location to mouse hover, '
+          'in pixels relative to top-left (default 0)'
+        ))
     return parser
 
-  def main(path, utils_impl=Utils):
+  def main(args, utils_impl=Utils):
     """Capture a screenshot of COVIDcast.
 
     Parameters
     ----------
-    path : str
-        The absolute path of the file where the screenshot is rendered.
+    args : argparse.Namespace
+        Command-line arguments.
     """
 
-    with utils_impl.run_screenshot_stack(MapPreview.SCREEN_SIZE) as driver:
-      MapPreview.take_screenshot(driver, path)
+    if args.date:
+      resolved_date = args.date
+    else:
+      resolved_date = MapPreview.get_most_recent_date(
+          args.source, args.signal, args.geo_type, args.geo_value)
+    print(f'using latest data reported for date {resolved_date}')
+
+    screen_size = (
+      args.width + MapPreview.SCREEN_PADDING[0],
+      args.height + MapPreview.SCREEN_PADDING[1],
+    )
+    with utils_impl.run_screenshot_stack(screen_size) as driver:
+      MapPreview.take_screenshot(driver, args, resolved_date)
 
 
 if __name__ == '__main__':
-  args = MapPreview.get_argument_parser().parse_args()
-  MapPreview.main(args.path)
+  MapPreview.main(MapPreview.get_argument_parser().parse_args())
