@@ -36,10 +36,11 @@ class MapPreviewTests(unittest.TestCase):
       MapPreview.get_most_recent_date(
           None, None, None, None, epidata_impl=mock_epidata)
 
-  def test_take_screenshot(self):
+  def test_take_screenshot_saves_screenshot(self):
     """Run through the screenshot flow."""
 
     mock_map = MagicMock()
+    mock_map.find_elements_by_class_name.return_value = [mock_map] * 10
     mock_driver = MagicMock()
     mock_driver.title = 'COVIDcast'
     mock_driver.find_elements_by_css_selector.return_value = [mock_map]
@@ -66,7 +67,22 @@ class MapPreviewTests(unittest.TestCase):
       MapPreview.take_screenshot(
           mock_driver,
           MagicMock(),
-          sentinel.date,
+          None,
+          time_impl=MagicMock(),
+          webdriver_impl=MagicMock())
+
+  def test_take_screenshot_shows_failure_reason(self):
+    """Re-wrap screenshot exceptions with a hint of what caused the failure."""
+
+    mock_driver = MagicMock()
+    mock_driver.title = 'COVIDcast'
+    mock_driver.find_elements_by_css_selector.return_value = []
+
+    with self.assertRaises(MapPreviewException):
+      MapPreview.take_screenshot(
+          mock_driver,
+          MagicMock(),
+          None,
           time_impl=MagicMock(),
           webdriver_impl=MagicMock())
 

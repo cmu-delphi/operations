@@ -109,19 +109,30 @@ class MapPreview:
     print('waiting for map to load')
     WebDriverWait(driver, 10).until_not(is_loading)
 
-    root = driver.find_elements_by_css_selector('main.root')[0]
+    def find_element(func, query, index):
+      elements = func(query)
+      if index >= len(elements):
+        raise MapPreviewException(f'unable to locate element {query} #{index}')
+      return elements[index]
+
+    root = find_element(driver.find_elements_by_css_selector, 'main.root', 0)
 
     print('hiding extra ui')
-    options = root.find_elements_by_class_name('options-container')[0]
-    search = root.find_elements_by_class_name('search-container')[0]
-    compare = root.find_elements_by_class_name('panel-bottom-wrapper')[0]
+    options = find_element(
+        root.find_elements_by_class_name, 'options-container', 0)
+    search = find_element(
+        root.find_elements_by_class_name, 'search-container', 0)
+    compare = find_element(
+        root.find_elements_by_class_name, 'panel-bottom-wrapper', 0)
     driver.execute_script('arguments[0].style.display="none"', options)
     driver.execute_script('arguments[0].style.display="none"', search)
     driver.execute_script('arguments[0].style.display="none"', compare)
 
     print('resetting map view')
-    controls = root.find_elements_by_class_name('map-controls-container')[0]
-    home_button = controls.find_elements_by_class_name('pg-button')[2]
+    controls = find_element(
+        root.find_elements_by_class_name, 'map-controls-container', 0)
+    home_button = find_element(
+        controls.find_elements_by_class_name, 'pg-button', 2)
     home_button.click()
     # allow time for the animation to complete
     time_impl.sleep(5)
@@ -191,18 +202,18 @@ class MapPreview:
     parser.add_argument(
         '--hover_x',
         type=int,
-        default=0,
+        default=1077,
         help=(
           'horizontal location to mouse hover, '
-          'in pixels relative to top-left (default 0)'
+          'in pixels relative to top-left (default 1077)'
         ))
     parser.add_argument(
         '--hover_y',
         type=int,
-        default=0,
+        default=372,
         help=(
           'vertical location to mouse hover, '
-          'in pixels relative to top-left (default 0)'
+          'in pixels relative to top-left (default 372)'
         ))
     return parser
 
