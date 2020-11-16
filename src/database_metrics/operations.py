@@ -1,4 +1,4 @@
-"""Operations for which metrics are captured for."""
+"""We can collect metrics on the data transformation procedures defined in this file."""
 import requests
 from requests import Response
 
