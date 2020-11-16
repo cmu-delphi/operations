@@ -40,7 +40,7 @@ def parse_metrics(metrics: tuple) -> dict:
     -------
     Dictionary containing final disk usage, runtime, and list of memory usage during function call.
     """
-    output = {"db_disk_usage_mb": metrics[0],
+    output = {"db_disk_usage_mb": parse_db_size(metrics[0]),
               "runtime": metrics[1],
               "memory_usage_mb": [i["memory_stats"]["usage"] / 1024 / 1024 for i in metrics[2]]}
     return output

@@ -9,10 +9,10 @@ class TestParser:
         assert parsers.parse_db_size(test_query_result) == 7.796875
 
     def test_metrics(self):
-        test_metrics = (1,
-                        2,
+        test_metrics = (b'db\tsize_mb\nepidata\t7.79687500\ninformation_schema\t0.18750000\n',
+                        1,
                         [{"memory_stats": {"usage": 3}}, {"memory_stats": {"usage": 4}}])
         assert parsers.parse_metrics(test_metrics) == {
-            "db_disk_usage_mb": 1,
-            "runtime": 2,
+            "db_disk_usage_mb": 7.796875,
+            "runtime": 1,
             "memory_usage_mb": [3/1024/1024, 4/1024/1024]}
