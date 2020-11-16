@@ -20,7 +20,6 @@ def send_query(params: dict) -> Response:
     Requests Response object.
     """
     req = requests.get("http://localhost:10080/epidata/api.php",
-                       auth=("user", "pass"),
                        params=params)
     return req
 
