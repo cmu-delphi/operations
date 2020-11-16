@@ -29,7 +29,7 @@ def load_data(client: DockerClient, source: str, file_pattern: str) -> bytes:
     Ingest data into epidata database using the Python docker image.
 
     Copies files from common_full/covidcast/receiving/`source`/`file_pattern`, which should be
-    copied into via the DockerFile, to the common/covidcast/receiving/`source`/ folder
+    copied to the image via the DockerFile, to the common/covidcast/receiving/`source`/ folder
     for ingestion. Runs ingestion via the python command.
 
     Parameters
