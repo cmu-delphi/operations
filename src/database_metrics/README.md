@@ -11,7 +11,7 @@ sub folders corresponding to the production ingestion structure: `common_full/co
     `set db.epi = ('user', 'pass')`, which will match the testing docker image.  
     b. Add `COPY common_full common_full` to `repos/delphi/operations/dev/docker/python/Dockerfile` after copying source files.
 4. Continue with the tutorial to complete the following steps:
-    a. Build the `delphi_web`, `delphi_web_epidata`, `delphi_database`, and `delphi_python` images according to the tutorial.  
-    b. Start the `delphi-net` network according to the tutorial.  
-    c. Run the database and web server according to the tutorial.  
+    a. Build the `delphi_web`, `delphi_web_epidata`, `delphi_database`, and `delphi_python` images. 
+    b. Create the `delphi-net` network.  
+    c. Run the database and web server.  
 5. TODO #35. TBD based on exact user-facing implementation
