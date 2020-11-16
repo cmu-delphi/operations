@@ -2,7 +2,7 @@
 from src.database_metrics import parsers
 
 
-class TestParsers():
+class TestParser:
 
     def test_parse_db_size(self):
         test_query_result = b'db\tsize_mb\nepidata\t7.79687500\ninformation_schema\t0.18750000\n'
