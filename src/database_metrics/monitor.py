@@ -3,7 +3,7 @@ import time
 from typing import Callable
 
 from docker.models.containers import Container
-from .db_actions import _get_epidata_db_size
+from .db_actions import _get_epidata_db_size, _get_covidcast_rows
 
 
 def get_metrics(func: Callable, container: Container) -> tuple:
@@ -40,4 +40,7 @@ def get_metrics(func: Callable, container: Container) -> tuple:
         else:
             break
     end_time = time.time()
-    return _get_epidata_db_size(container), end_time-start_time, container_stats
+    return (_get_covidcast_rows(container).output,
+            _get_epidata_db_size(container).output,
+            end_time-start_time,
+            container_stats)
