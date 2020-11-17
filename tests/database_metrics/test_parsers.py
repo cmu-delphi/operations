@@ -15,7 +15,6 @@ class TestParser(unittest.TestCase):
         test_metrics = (b'db\tsize_mb\nepidata\t7.79687500\ninformation_schema\t0.18750000\n',
                         1,
                         [{"memory_stats": {"usage": 3}}, {"memory_stats": {"usage": 4}}])
-        print(parse_metrics(test_metrics))
         self.assertDictEqual(
             parse_metrics(test_metrics),
             {"db_disk_usage_mb": 7.796875,
