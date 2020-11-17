@@ -45,9 +45,9 @@ def measure_database(datasets: list,
     query_funcs = [partial(send_query, params=p) for p in queries]
     meta_func = partial(update_meta, client=client)
     for dataset in datasets:
-        load_func = partial(load_data, client=client, source=dataset[0], file_pattern=datasets[1])
         if not append_data:
             _clear_db(db_container)
+        load_func = partial(load_data, client=client, source=dataset[0], file_pattern=dataset[1])
         output["load"].append(get_metrics(load_func, db_container))
         output["meta"].append(get_metrics(meta_func, db_container))
         for i, query in enumerate(query_funcs):
@@ -66,7 +66,6 @@ def get_metrics(func: Callable, container: Container) -> tuple:
     This polling behavior is also the reason for the use of `else: break` in the for loop instead of
     `while worker_process.is_alive()`, since keeping the same container.stats generator instead of
     calling it each loop lets us capture more data points.
-
 
     Parameters
     ----------
