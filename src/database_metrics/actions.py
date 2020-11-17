@@ -47,10 +47,10 @@ def load_data(client: DockerClient, source: str, file_pattern: str) -> bytes:
     """
     return client.containers.run(
         image=client.images.get("delphi_python"),
-        command=f'bash -c "mkdir -p /common/covidcast/receiving/usa-facts && \
-        cp common_full/covidcast/receiving/{source}/{file_pattern} '
-                f'/common/covidcast/receiving/{source}/ && \
-        python3 -m delphi.epidata.acquisition.covidcast.csv_to_database '
+        command=f'bash -c "mkdir -p /common/covidcast/receiving/{source} && '
+                f'cp common_full/covidcast/receiving/{source}/{file_pattern} '
+                f'/common/covidcast/receiving/{source}/ && '
+                f'python3 -m delphi.epidata.acquisition.covidcast.csv_to_database '
                 f'--data_dir /common/covidcast/"',
         network="delphi-net")
 
