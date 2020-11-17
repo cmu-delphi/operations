@@ -7,13 +7,14 @@ from docker.models.containers import Container
 from docker import DockerClient
 from .db_actions import _get_epidata_db_size, _clear_db
 from .actions import load_data, update_meta, send_query
+from .parsers import parse_metrics
 
 
 def measure_database(datasets: list,
                      client: DockerClient,
                      db_container: Container,
                      queries: list = [],
-                     append_data: bool = False) -> dict:
+                     append_datasets: bool = False) -> dict:
     """
     Measure performance metrics for a list of functions and datasets.
 
@@ -32,7 +33,7 @@ def measure_database(datasets: list,
         Docker container object containing the database to measure.
     queries: list of dictionaries, optional
         List of query parameters to test query runtimes on. Defaults to empty list.
-    append_data: boolean, optional
+    append_datasets: boolean, optional
         Boolean for whether to append each dataset onto the previous one (True), or clear the
         database for each dataset (False). Defaults to False.
 
@@ -41,17 +42,17 @@ def measure_database(datasets: list,
     Dictionary of metrics. Keys will be the datasets and values will be dicts containing the output
     of parse_metrics() for loading, metadata updates, and queries.
     """
-    output = {"load": [], "meta": []}
+    output = {"load": [], "meta": [], "append_datasets": append_datasets}
     query_funcs = [partial(send_query, params=p) for p in queries]
     meta_func = partial(update_meta, client=client)
     for dataset in datasets:
-        if not append_data:
+        if not append_datasets:
             _clear_db(db_container)
         load_func = partial(load_data, client=client, source=dataset[0], file_pattern=dataset[1])
-        output["load"].append(get_metrics(load_func, db_container))
-        output["meta"].append(get_metrics(meta_func, db_container))
+        output["load"].append(parse_metrics(get_metrics(load_func, db_container)))
+        output["meta"].append(parse_metrics(get_metrics(meta_func, db_container)))
         for i, query in enumerate(query_funcs):
-            output.get(f"query{i}", []).append(get_metrics(query, db_container))
+            output.get(f"query{i}", []).append(parse_metrics(get_metrics(query, db_container)))
     return output
 
 
