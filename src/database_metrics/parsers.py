@@ -42,5 +42,5 @@ def parse_metrics(metrics: tuple) -> dict:
     """
     output = {"db_disk_usage_mb": parse_db_size(metrics[0].output),
               "runtime": metrics[1],
-              "memory_usage_mb": max(i["memory_stats"]["usage"] / 1024 / 1024 for i in metrics[2])}
+              "max_mem_usage_mb": max(i["memory_stats"]["usage"] / 1024 / 1024 for i in metrics[2])}
     return output
