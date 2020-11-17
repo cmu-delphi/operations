@@ -42,7 +42,7 @@ def measure_database(datasets: list,
     Dictionary of metrics. Keys will be the datasets and values will be dicts containing the output
     of parse_metrics() for loading, metadata updates, and queries.
     """
-    output = {"load": [], "meta": [], "append_datasets": append_datasets}
+    output = {"load": [], "meta": [], "datasets": datasets, "append_datasets": append_datasets}
     query_funcs = [partial(send_query, params=p) for p in queries]
     meta_func = partial(update_meta, client=client)
     for dataset in datasets:
