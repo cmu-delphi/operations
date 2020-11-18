@@ -2,9 +2,9 @@
 from docker.models.containers import Container, ExecResult
 
 
-def _get_epidata_db_size(container: Container) -> float:
+def _get_epidata_db_size(container: Container) -> ExecResult:
     """
-    Query and parse the size of the epidata database in megabytes.
+    Query the size of the epidata database in megabytes.
 
     Parameters
     ----------
@@ -20,6 +20,25 @@ def _get_epidata_db_size(container: Container) -> float:
         '"SELECT table_schema db, sum(data_length + index_length)/1024/1024 size_mb '
         'FROM information_schema.TABLES GROUP BY table_schema ORDER BY table_schema;"')
     return db_sizes
+
+
+def _get_covidcast_rows(container: Container) -> ExecResult:
+    """
+    Query the row count of the epidata.covidcast table.
+
+    Parameters
+    ----------
+    container: Container
+        Docker Container object where the MariaDB database is running.
+
+    Returns
+    -------
+    ExecResult from exec_run, which will be the exit code and the query result as a bytestring.
+    """
+    row_count = container.exec_run(
+        'mysql -uuser -ppass -e '
+        '"SELECT count(*) FROM epidata.covidcast;"')
+    return row_count
 
 
 def _clear_cache(container: Container) -> ExecResult:
