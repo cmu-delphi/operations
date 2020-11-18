@@ -23,6 +23,26 @@ def parse_db_size(query_result: bytes) -> float:
     return float(epidata_usage)
 
 
+def parse_row_count(query_result: bytes) -> int:
+    r"""
+    Parse the output of the SQL query in _get_covidcast_rows() to return the covidcast row count.
+
+    The _get_covidcast_rows() ExecResult output will be a bytestring like
+    b'count(*)\n1604\n'. This function will retrieve 1604 as an integer
+
+    Parameters
+    ----------
+    query_result: bytes
+        Bytestring result from _get_epidata_db_size().
+
+    Returns
+    -------
+    Float representing size of epidata database in megabytes.
+    """
+    db_rows = query_result.decode().split("\n")[1]
+    return int(db_rows)
+
+
 def parse_metrics(metrics: tuple) -> dict:
     """
     Parse and convert the metrics captured by get_metrics() into a dictionary.
@@ -40,7 +60,8 @@ def parse_metrics(metrics: tuple) -> dict:
     -------
     Dictionary containing final disk usage, runtime, and list of memory usage during function call.
     """
-    output = {"db_disk_usage_mb": parse_db_size(metrics[0].output),
-              "runtime": metrics[1],
-              "max_mem_usage_mb": max(i["memory_stats"]["usage"] / 1024 / 1024 for i in metrics[2])}
+    output = {"table_rows": parse_row_count(metrics[0]),
+              "db_disk_usage_mb": parse_db_size(metrics[1]),
+              "runtime": metrics[2],
+              "memory_usage_mb": max(i["memory_stats"]["usage"] / 1024 / 1024 for i in metrics[3])}
     return output
