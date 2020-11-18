@@ -58,7 +58,7 @@ def parse_metrics(metrics: tuple) -> dict:
 
     Returns
     -------
-    Dictionary containing final disk usage, runtime, and list of memory usage during function call.
+    Dictionary containing the number of rows in the database, final disk usage, runtime, and the maximum memory usage queried during the function call.
     """
     output = {"table_rows": parse_row_count(metrics[0]),
               "db_disk_usage_mb": parse_db_size(metrics[1]),
