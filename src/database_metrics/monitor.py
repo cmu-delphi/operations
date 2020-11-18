@@ -1,9 +1,63 @@
 import multiprocessing as mp
 import time
+from functools import partial
 from typing import Callable
 
 from docker.models.containers import Container
-from .db_actions import _get_epidata_db_size, _get_covidcast_rows
+from docker import DockerClient
+from delphi.operations.database_metrics.db_actions import _get_epidata_db_size, \
+    _get_covidcast_rows, \
+    _clear_db
+from delphi.operations.database_metrics.actions import load_data, update_meta, send_query
+from delphi.operations.database_metrics.parsers import parse_metrics
+
+
+def measure_database(datasets: list,
+                     client: DockerClient,
+                     db_container: Container,
+                     queries: list = None,
+                     append_datasets: bool = False) -> dict:
+    """
+    Measure performance metrics for a list of functions and datasets.
+
+    For each dataset in `datasets`, measure load time, metadata update time, and optional queries.
+    Datasets are specified by a tuple of (source, file_pattern).
+    e.g. ("usa-facts", "202003*_county*"), which will load all the county level usa-facts data
+    for March 2020.
+
+    Parameters
+    ----------
+    datasets: list of tuples
+        List of 2-tuples defined as (source, patterns for files) to be included in each dataset.
+    client: DockerClient
+        DockerClient object to access and execute python images.
+    db_container: Container
+        Docker container object containing the database to measure.
+    queries: list of dictionaries, optional
+        List of query parameters to test query runtimes on. Defaults to empty list.
+    append_datasets: boolean, optional
+        Boolean for whether to append each dataset onto the previous one (True), or clear the
+        database for each dataset (False). Defaults to False.
+
+    Returns
+    -------
+    Dictionary of metrics. Keys will be the datasets and values will be dicts containing the output
+    of parse_metrics() for loading, metadata updates, and queries.
+    """
+    queries = [] if queries is None else queries
+    output = {"load": [], "meta": [], "datasets": datasets, "append_datasets": append_datasets}
+    query_funcs = [partial(send_query, params=p) for p in queries]
+    meta_func = partial(update_meta, client=client)
+    for dataset in datasets:
+        if not append_datasets:
+            _clear_db(db_container)
+        load_func = partial(load_data, client=client, source=dataset[0], file_pattern=dataset[1])
+        output["load"].append(parse_metrics(get_metrics(load_func, db_container)))
+        output["meta"].append(parse_metrics(get_metrics(meta_func, db_container)))
+        for i, query in enumerate(query_funcs):
+            output[f"query{i}"] = output.get(f"query{i}", [])
+            output[f"query{i}"].append(parse_metrics(get_metrics(query, db_container)))
+    return output
 
 
 def get_metrics(func: Callable, container: Container) -> tuple:
@@ -17,7 +71,6 @@ def get_metrics(func: Callable, container: Container) -> tuple:
     This polling behavior is also the reason for the use of `else: break` in the for loop instead of
     `while worker_process.is_alive()`, since keeping the same container.stats generator instead of
     calling it each loop lets us capture more data points.
-
 
     Parameters
     ----------
