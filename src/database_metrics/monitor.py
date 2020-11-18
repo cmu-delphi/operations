@@ -5,15 +5,17 @@ from typing import Callable
 
 from docker.models.containers import Container
 from docker import DockerClient
-from .db_actions import _get_epidata_db_size, _get_covidcast_rows, _clear_db
-from .actions import load_data, update_meta, send_query
-from .parsers import parse_metrics
+from delphi.operations.database_metrics.db_actions import _get_epidata_db_size, \
+    _get_covidcast_rows, \
+    _clear_db
+from delphi.operations.database_metrics.actions import load_data, update_meta, send_query
+from delphi.operations.database_metrics.parsers import parse_metrics
 
 
 def measure_database(datasets: list,
                      client: DockerClient,
                      db_container: Container,
-                     queries: list = [],
+                     queries: list = None,
                      append_datasets: bool = False) -> dict:
     """
     Measure performance metrics for a list of functions and datasets.
@@ -42,6 +44,7 @@ def measure_database(datasets: list,
     Dictionary of metrics. Keys will be the datasets and values will be dicts containing the output
     of parse_metrics() for loading, metadata updates, and queries.
     """
+    queries = [] if queries is None else queries
     output = {"load": [], "meta": [], "datasets": datasets, "append_datasets": append_datasets}
     query_funcs = [partial(send_query, params=p) for p in queries]
     meta_func = partial(update_meta, client=client)
@@ -52,7 +55,8 @@ def measure_database(datasets: list,
         output["load"].append(parse_metrics(get_metrics(load_func, db_container)))
         output["meta"].append(parse_metrics(get_metrics(meta_func, db_container)))
         for i, query in enumerate(query_funcs):
-            output.get(f"query{i}", []).append(parse_metrics(get_metrics(query, db_container)))
+            output[f"query{i}"] = output.get(f"query{i}", [])
+            output[f"query{i}"].append(parse_metrics(get_metrics(query, db_container)))
     return output
 
 
