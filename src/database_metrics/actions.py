@@ -19,7 +19,7 @@ def send_query(params: dict) -> Response:
     -------
     Requests Response object.
     """
-    req = requests.get("http://localhost:10080/epidata/api.php",
+    req = requests.get("http://delphi_web_epidata:10080/epidata/api.php",
                        params=params)
     return req
 
