@@ -38,7 +38,7 @@ docstring for more information. Example:
                "time_type": "day",
                "geo_type": "*",
                "time_values": "20200301-2020801",
-               "geo_value": "*"}
+               "geo_value": "*"}]
     datasets = [("usa-facts", "202003*_county*"), 
                 ("usa-facts", "202004*_county*")]
     monitor.measure_database(datasets,
