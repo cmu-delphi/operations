@@ -18,31 +18,30 @@ class TestMonitor(unittest.TestCase):
         # mock_container.exec_run.return_value = None
         # mock_docker_client = MagicMock()
         # mock_docker_client.containers.run.return_value = mock_container
-
         mock_metrics.return_value = None
         mock_clear.return_value = None
         mock_parser.side_effect = [
-            {"table_rows": 1, "db_disk_usage_mb": 2., "runtime": 3, "memory_usage_mb": 4},
-            {"table_rows": 5, "db_disk_usage_mb": 6., "runtime": 7, "memory_usage_mb": 8},
-            {"table_rows": 9, "db_disk_usage_mb": 10., "runtime": 11, "memory_usage_mb": 12},
-            {"table_rows": 2, "db_disk_usage_mb": 4., "runtime": 6, "memory_usage_mb": 8},
-            {"table_rows": 1, "db_disk_usage_mb": 3., "runtime": 5, "memory_usage_mb": 7},
-            {"table_rows": 3, "db_disk_usage_mb": 6., "runtime": 9, "memory_usage_mb": 12},
+            {"a": 1, "b": 2., "c": 3, "d": 4},
+            {"a": 5, "b": 6., "c": 7, "d": 8},
+            {"a": 9, "b": 10., "c": 11, "d": 12},
+            {"a": 2, "b": 4., "c": 6, "d": 8},
+            {"a": 1, "b": 3., "c": 5, "d": 7},
+            {"a": 3, "b": 6., "c": 9, "d": 12},
         ]
         expected = {
             "datasets": [("a", "b"), ("c", "d")],
             "append_datasets": False,
             "load": [
-                {"table_rows": 1, "db_disk_usage_mb": 2., "runtime": 3, "memory_usage_mb": 4},
-                {"table_rows": 2, "db_disk_usage_mb": 4., "runtime": 6, "memory_usage_mb": 8}
+                {"a": 1, "b": 2., "c": 3, "d": 4},
+                {"a": 2, "b": 4., "c": 6, "d": 8}
             ],
             "meta": [
-                {"table_rows": 5, "db_disk_usage_mb": 6., "runtime": 7, "memory_usage_mb": 8},
-                {"table_rows": 1, "db_disk_usage_mb": 3., "runtime": 5, "memory_usage_mb": 7}
+                {"a": 5, "b": 6., "c": 7, "d": 8},
+                {"a": 1, "b": 3., "c": 5, "d": 7}
             ],
             "query0": [
-                {"table_rows": 9, "db_disk_usage_mb": 10., "runtime": 11, "memory_usage_mb": 12},
-                {"table_rows": 3, "db_disk_usage_mb": 6., "runtime": 9, "memory_usage_mb": 12}
+                {"a": 9, "b": 10., "c": 11, "d": 12},
+                {"a": 3, "b": 6., "c": 9, "d": 12}
             ],
         }
         output = monitor.measure_database([("a", "b"), ("c", "d")], None, None, ["q1"])

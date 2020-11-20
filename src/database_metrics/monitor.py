@@ -9,7 +9,7 @@ from delphi.operations.database_metrics.db_actions import _get_epidata_db_size, 
     _get_covidcast_rows, \
     _clear_db
 from delphi.operations.database_metrics.actions import load_data, update_meta, send_query
-from delphi.operations.database_metrics.parsers import parse_metrics
+from delphi.operations.database_metrics.parsers import parse_metrics, parse_row_count, parse_db_size
 
 
 def measure_database(datasets: list,
@@ -81,10 +81,12 @@ def get_metrics(func: Callable, container: Container) -> tuple:
 
     Returns
     -------
-    3-Tuple of final disk usage, runtime, and list of dicts containing docker stats.
+    6-Tuple of start/end disk usage, start/end covidcast table size, runtime, and list of dicts containing docker stats.
     """
     worker_process = mp.Process(target=func)
     container_stats = [container.stats(stream=False)]  # get one stat right before starting process
+    start_size = _get_epidata_db_size(container).output
+    start_rows = _get_covidcast_rows(container).output
     start_time = time.time()
     worker_process.start()
     for stat in container.stats(decode=True):
@@ -93,7 +95,11 @@ def get_metrics(func: Callable, container: Container) -> tuple:
         else:
             break
     end_time = time.time()
-    return (_get_covidcast_rows(container).output,
-            _get_epidata_db_size(container).output,
+    end_size = _get_epidata_db_size(container).output
+    end_rows = _get_covidcast_rows(container).output
+    return (parse_db_size(start_size),
+            parse_db_size(end_size),
+            parse_row_count(start_rows),
+            parse_row_count(end_rows),
             end_time-start_time,
             container_stats)
