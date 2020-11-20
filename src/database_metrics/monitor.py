@@ -14,7 +14,7 @@ from delphi.operations.database_metrics.parsers import parse_metrics
 
 def measure_database(datasets: list,
                      client: DockerClient,
-                     db_container: Container,
+                     db_container: str = "delphi_database_epidata",
                      image: str = "delphi-python",
                      queries: list = None,
                      append_datasets: bool = False) -> dict:
@@ -32,10 +32,10 @@ def measure_database(datasets: list,
         List of 2-tuples defined as (source, patterns for files) to be included in each dataset.
     client: DockerClient
         DockerClient object to access and execute python images.
-    db_container: str
+    db_container: str, optional
         Name of Docker container containing the database to measure.
     image: str, optional
-        Name of Docker image containing the data loading and metadata updating code. Defaults to 'delphi-python'.
+        Name of Docker image containing the data loading and metadata updating code.
     queries: list of dictionaries, optional
         List of query parameters to test query runtimes on. Defaults to empty list.
     append_datasets: boolean, optional
