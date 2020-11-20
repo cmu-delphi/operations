@@ -58,7 +58,7 @@ def measure_database(datasets: list,
         output["load"].append(parse_metrics(get_metrics(load_func, db)))
         output["meta"].append(parse_metrics(get_metrics(meta_func, db)))
         for i, query in enumerate(query_funcs):
-            output[f"query{i}"] = output.get(f"query{i}", []) + [parse_metrics(get_metrics(query, db_container))]
+            output[f"query{i}"] = output.get(f"query{i}", []) + [parse_metrics(get_metrics(query, db))]
     return output
 
 

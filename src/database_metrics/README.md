@@ -44,7 +44,7 @@ docstring for more information. Example:
     monitor.measure_database(datasets,
                              client,
                              "delphi_database_epidata",
-                             "delphi-python"
+                             "delphi_python",
                              queries,
-                             append_data=True)
+                             append_datasets=True)
     ```
