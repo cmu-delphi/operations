@@ -14,4 +14,37 @@ sub folders corresponding to the production ingestion structure: `common_full/co
     a. Build the `delphi_web`, `delphi_web_epidata`, `delphi_database`, and `delphi_python` images. 
     b. Create the `delphi-net` network.  
     c. Run the database and web server.  
-5. TODO #35. TBD based on exact user-facing implementation
+5. Run the Python docker container, with the host docker.sock mounted,
+in interactive mode, which should bring up a Python shell.: 
+`docker run --rm -it --network delphi-net -v /var/run/docker.sock:/var/run/docker.sock delphi_python`
+6. Import the `database_metrics.monitor` module: `from delphi.operations.database_metrics import monitor`
+7. Run `monitor.measure_database` on your desired datasets and queries. See the function 
+docstring for more information. Example: 
+    ```
+    import docker
+    from delphi.operations.database_metrics import monitor
+    
+    client = docker.from_env()
+    queries = [{"source": "covidcast",
+               "data_source": "usa-facts",
+               "signal": "deaths_incidence_num",
+               "time_type": "day",
+               "geo_type": "county",
+               "time_values": "20200301-2020501",
+               "geo_value": "*"},
+               {"source": "covidcast",
+               "data_source": "usa-facts",
+               "signal": "confirmed_incidence_num",
+               "time_type": "day",
+               "geo_type": "*",
+               "time_values": "20200301-2020801",
+               "geo_value": "*"}
+    datasets = [("usa-facts", "202003*_county*"), 
+                ("usa-facts", "202004*_county*")]
+    monitor.measure_database(datasets,
+                             client,
+                             "delphi_database_epidata",
+                             "delphi-python"
+                             queries,
+                             append_data=True)
+    ```
