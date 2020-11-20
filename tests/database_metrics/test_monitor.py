@@ -21,27 +21,27 @@ class TestMonitor(unittest.TestCase):
         mock_metrics.return_value = None
         mock_clear.return_value = None
         mock_parser.side_effect = [
-            {"a": 1, "b": 2., "c": 3, "d": 4},
-            {"a": 5, "b": 6., "c": 7, "d": 8},
-            {"a": 9, "b": 10., "c": 11, "d": 12},
-            {"a": 2, "b": 4., "c": 6, "d": 8},
-            {"a": 1, "b": 3., "c": 5, "d": 7},
-            {"a": 3, "b": 6., "c": 9, "d": 12},
+            {"test": "output1"},
+            {"test": "output2"},
+            {"test": "output3"},
+            {"test": "output4"},
+            {"test": "output5"},
+            {"test": "output6"}
         ]
         expected = {
             "datasets": [("a", "b"), ("c", "d")],
             "append_datasets": False,
             "load": [
-                {"a": 1, "b": 2., "c": 3, "d": 4},
-                {"a": 2, "b": 4., "c": 6, "d": 8}
+                {"test": "output1"},
+                {"test": "output4"},
             ],
             "meta": [
-                {"a": 5, "b": 6., "c": 7, "d": 8},
-                {"a": 1, "b": 3., "c": 5, "d": 7}
+                {"test": "output2"},
+                {"test": "output5"},
             ],
             "query0": [
-                {"a": 9, "b": 10., "c": 11, "d": 12},
-                {"a": 3, "b": 6., "c": 9, "d": 12}
+                {"test": "output3"},
+                {"test": "output6"},
             ],
         }
         output = monitor.measure_database([("a", "b"), ("c", "d")], None, None, ["q1"])
