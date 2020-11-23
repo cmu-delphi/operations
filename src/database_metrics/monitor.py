@@ -7,7 +7,8 @@ from docker.models.containers import Container
 from docker import DockerClient
 from delphi.operations.database_metrics.db_actions import _get_epidata_db_size, \
     _get_covidcast_rows, \
-    _clear_db
+    _clear_db,
+    _clear_cache
 from delphi.operations.database_metrics.actions import load_data, update_meta, send_query
 from delphi.operations.database_metrics.parsers import parse_metrics
 
@@ -17,6 +18,7 @@ def measure_database(datasets: list,
                      db_container: str = "delphi_database_epidata",
                      image: str = "delphi-python",
                      queries: list = None,
+                     clear_cache: bool = True,
                      append_datasets: bool = False) -> dict:
     """
     Measure performance metrics for a list of functions and datasets.
@@ -38,9 +40,12 @@ def measure_database(datasets: list,
         Name of Docker image containing the data loading and metadata updating code.
     queries: list of dictionaries, optional
         List of query parameters to test query runtimes on. Defaults to empty list.
+    clear_cache: boolean, optional
+        Boolean that determines whether the MariaDB query cache should be flushed (True) or not (False) before each
+        operation. Defaults to True.
     append_datasets: boolean, optional
         Boolean for whether to append each dataset onto the previous one (True), or clear the
-        database for each dataset (False). Defaults to False.
+        database and cache for each dataset (False). Defaults to False.
 
     Returns
     -------
@@ -62,7 +67,7 @@ def measure_database(datasets: list,
     return output
 
 
-def get_metrics(func: Callable, container: Container) -> tuple:
+def get_metrics(func: Callable, container: Container, clear_cache: bool) -> tuple:
     """
     Get runtime, disk usage, and memory usage for a container during a function call.
 
@@ -80,12 +85,16 @@ def get_metrics(func: Callable, container: Container) -> tuple:
         Function to run while metrics are captured.
     container: Container
         Docker Container object which will be monitored.
+    clear_cache: bool
+        Boolean that determines whether the MariaDB query cache should be flushed (True) or not (False) before running.
 
     Returns
     -------
     3-Tuple of final disk usage, runtime, and list of dicts containing docker stats.
     """
     worker_process = mp.Process(target=func)
+    if clear_cache:
+        _clear_cache(container)
     container_stats = [container.stats(stream=False)]  # get one stat right before starting process
     start_time = time.time()
     worker_process.start()
