@@ -7,7 +7,7 @@ from docker.models.containers import Container
 from docker import DockerClient
 from delphi.operations.database_metrics.db_actions import _get_epidata_db_size, \
     _get_covidcast_rows, \
-    _clear_db,
+    _clear_db, \
     _clear_cache
 from delphi.operations.database_metrics.actions import load_data, update_meta, send_query
 from delphi.operations.database_metrics.parsers import parse_metrics
