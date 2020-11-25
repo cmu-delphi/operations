@@ -7,7 +7,7 @@ from docker.models.containers import Container
 from docker import DockerClient
 from delphi.operations.database_metrics.db_actions import _get_epidata_db_size, \
     _get_covidcast_rows, \
-    _clear_db,
+    _clear_db, \
     _clear_cache
 from delphi.operations.database_metrics.actions import load_data, update_meta, send_query
 from delphi.operations.database_metrics.parsers import parse_metrics
@@ -53,8 +53,8 @@ def measure_database(datasets: list,
     of parse_metrics() for loading, metadata updates, and queries.
     """
     db = client.containers.get(db_container)
-    output = {"load": [], "meta": [], "datasets": datasets,
-              "append_datasets": append_datasets, "queries": queries}
+    output = {"load": [], "meta": [], "datasets": datasets, "queries": queries,
+              "append_datasets": append_datasets}
     query_funcs = [partial(send_query, params=p) for p in queries] if queries is not None else []
     meta_func = partial(update_meta, client=client, image=image)
     for dataset in datasets:
@@ -67,7 +67,7 @@ def measure_database(datasets: list,
         for i, query in enumerate(query_funcs):
             output[f"query{i}"] = output.get(f"query{i}", [])
             output[f"query{i}"].append(parse_metrics(get_metrics(query, db_container, clear_cache)))
-        return output
+    return output
 
 
 def get_metrics(func: Callable, container: Container, clear_cache: bool) -> tuple:
