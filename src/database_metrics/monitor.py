@@ -53,18 +53,21 @@ def measure_database(datasets: list,
     of parse_metrics() for loading, metadata updates, and queries.
     """
     db = client.containers.get(db_container)
-    output = {"load": [], "meta": [], "datasets": datasets, "append_datasets": append_datasets, "queries": queries}
+    output = {"load": [], "meta": [], "datasets": datasets,
+              "append_datasets": append_datasets, "queries": queries}
     query_funcs = [partial(send_query, params=p) for p in queries] if queries is not None else []
     meta_func = partial(update_meta, client=client, image=image)
     for dataset in datasets:
         if not append_datasets:
             _clear_db(db)
-        load_func = partial(load_data, client=client, image=image, source=dataset[0], file_pattern=dataset[1])
-        output["load"].append(parse_metrics(get_metrics(load_func, db)))
-        output["meta"].append(parse_metrics(get_metrics(meta_func, db)))
+        load_func = partial(load_data, client=client, image=image,
+                            source=dataset[0], file_pattern=dataset[1])
+        output["load"].append(parse_metrics(get_metrics(load_func, db_container, clear_cache)))
+        output["meta"].append(parse_metrics(get_metrics(meta_func, db_container, clear_cache)))
         for i, query in enumerate(query_funcs):
-            output[f"query{i}"] = output.get(f"query{i}", []) + [parse_metrics(get_metrics(query, db))]
-    return output
+            output[f"query{i}"] = output.get(f"query{i}", [])
+            output[f"query{i}"].append(parse_metrics(get_metrics(query, db_container, clear_cache)))
+        return output
 
 
 def get_metrics(func: Callable, container: Container, clear_cache: bool) -> tuple:
