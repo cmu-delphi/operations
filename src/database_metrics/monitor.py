@@ -15,7 +15,8 @@ from delphi.operations.database_metrics.parsers import parse_metrics
 
 def measure_database(datasets: list,
                      client: DockerClient,
-                     db_container: Container,
+                     db_container: str = "delphi_database_epidata",
+                     image: str = "delphi-python",
                      queries: list = None,
                      clear_cache: bool = True,
                      append_datasets: bool = False) -> dict:
@@ -33,8 +34,10 @@ def measure_database(datasets: list,
         List of 2-tuples defined as (source, patterns for files) to be included in each dataset.
     client: DockerClient
         DockerClient object to access and execute python images.
-    db_container: Container
-        Docker container object containing the database to measure.
+    db_container: str, optional
+        Name of Docker container containing the database to measure.
+    image: str, optional
+        Name of Docker image containing the data loading and metadata updating code.
     queries: list of dictionaries, optional
         List of query parameters to test query runtimes on. Defaults to empty list.
     clear_cache: boolean, optional
@@ -49,14 +52,16 @@ def measure_database(datasets: list,
     Dictionary of metrics. Keys will be the datasets and values will be dicts containing the output
     of parse_metrics() for loading, metadata updates, and queries.
     """
-    queries = [] if queries is None else queries
-    output = {"load": [], "meta": [], "datasets": datasets, "append_datasets": append_datasets}
-    query_funcs = [partial(send_query, params=p) for p in queries]
-    meta_func = partial(update_meta, client=client)
+    db = client.containers.get(db_container)
+    output = {"load": [], "meta": [], "datasets": datasets, "queries": queries,
+              "append_datasets": append_datasets}
+    query_funcs = [partial(send_query, params=p) for p in queries] if queries is not None else []
+    meta_func = partial(update_meta, client=client, image=image)
     for dataset in datasets:
         if not append_datasets:
-            _clear_db(db_container)
-        load_func = partial(load_data, client=client, source=dataset[0], file_pattern=dataset[1])
+            _clear_db(db)
+        load_func = partial(load_data, client=client, image=image,
+                            source=dataset[0], file_pattern=dataset[1])
         output["load"].append(parse_metrics(get_metrics(load_func, db_container, clear_cache)))
         output["meta"].append(parse_metrics(get_metrics(meta_func, db_container, clear_cache)))
         for i, query in enumerate(query_funcs):

@@ -19,12 +19,15 @@ def send_query(params: dict) -> Response:
     -------
     Requests Response object.
     """
-    req = requests.get("http://delphi_web_epidata:10080/epidata/api.php",
+    req = requests.get("http://delphi_web_epidata:80/epidata/api.php",
                        params=params)
     return req
 
 
-def load_data(client: DockerClient, source: str, file_pattern: str) -> bytes:
+def load_data(client: DockerClient,
+              image: str,
+              source: str,
+              file_pattern: str) -> bytes:
     """
     Ingest data into epidata database using the Python docker image.
 
@@ -36,6 +39,8 @@ def load_data(client: DockerClient, source: str, file_pattern: str) -> bytes:
     ----------
     client: DockerClient
         Docker Client object containing the Python image.
+    image: str
+        Name of image containing data loading code.
     source: str
         Data source name
     file_pattern: str
@@ -46,7 +51,7 @@ def load_data(client: DockerClient, source: str, file_pattern: str) -> bytes:
     Bytestring of Docker log, either STDOUT or STDERR
     """
     return client.containers.run(
-        image=client.images.get("delphi_python"),
+        image=client.images.get(image),
         command=f'bash -c "mkdir -p /common/covidcast/receiving/{source} && '
                 f'cp common_full/covidcast/receiving/{source}/{file_pattern} '
                 f'/common/covidcast/receiving/{source}/ && '
@@ -55,7 +60,8 @@ def load_data(client: DockerClient, source: str, file_pattern: str) -> bytes:
         network="delphi-net")
 
 
-def update_meta(client: DockerClient) -> bytes:
+def update_meta(client: DockerClient,
+                image: str) -> bytes:
     """
     Update metadata cache in database.
 
@@ -63,12 +69,14 @@ def update_meta(client: DockerClient) -> bytes:
     ----------
     client: DockerClient
         Docker Client object containing the Python image.
+    image: str
+        Name of image containing metadata update code.
 
     Returns
     -------
     Bytestring of Docker log, either STDOUT or STDERR
     """
     return client.containers.run(
-        image=client.images.get("delphi_python"),
+        image=client.images.get(image),
         command="python3 -m delphi.epidata.acquisition.covidcast.covidcast_meta_cache_updater",
         network="delphi-net")
