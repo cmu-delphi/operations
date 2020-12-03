@@ -54,14 +54,18 @@ def parse_metrics(metrics: tuple) -> dict:
     Parameters
     ----------
     metrics: tuple
-        3-Tuple of metrics output by get_metrics().
+        Tuple of metrics output by get_metrics().
 
     Returns
     -------
-    Dictionary containing the number of rows in the database, final disk usage, runtime, and the maximum memory usage queried during the function call.
+    Dictionary containing the final rows in the covidcast table, rows loaded to the the covidcast table during the
+    operation, final database size, change in database size during the operation, runtime, and the maximum memory
+    usage queried during the function call.
     """
-    output = {"table_rows": parse_row_count(metrics[0]),
-              "db_disk_usage_mb": parse_db_size(metrics[1]),
-              "runtime": metrics[2],
-              "memory_usage_mb": max(i["memory_stats"]["usage"] / 1024 / 1024 for i in metrics[3])}
+    output = {"final_table_rows": metrics[3],
+              "rows_loaded": metrics[3] - metrics[2],
+              "db_size_mb": metrics[1],
+              "size_loaded_mb": metrics[1] - metrics[0],
+              "runtime": metrics[4],
+              "peak_memory_mb": max(i["memory_stats"]["usage"] / 1024 / 1024 for i in metrics[5])}
     return output
