@@ -14,10 +14,8 @@ class TestMonitor(unittest.TestCase):
     @patch("delphi.operations.database_metrics.monitor.parse_metrics")
     @patch("delphi.operations.database_metrics.monitor.get_metrics")
     def test_measure_database(self, mock_metrics, mock_parser, mock_clear):
-        # mock_container = MagicMock()
-        # mock_container.exec_run.return_value = None
-        # mock_docker_client = MagicMock()
-        # mock_docker_client.containers.run.return_value = mock_container
+        mock_client = MagicMock()
+        mock_client.containers.get.return_value = None
         mock_metrics.return_value = None
         mock_clear.return_value = None
         mock_parser.side_effect = [
@@ -28,9 +26,12 @@ class TestMonitor(unittest.TestCase):
             {"test": "output5"},
             {"test": "output6"}
         ]
+        test_datasets = [("a", "b"), ("c", "d")]
+        test_queries = ["q0"]
         expected = {
-            "datasets": [("a", "b"), ("c", "d")],
+            "datasets": test_datasets,
             "append_datasets": False,
+            "queries": test_queries,
             "load": [
                 {"test": "output1"},
                 {"test": "output4"},
@@ -44,6 +45,6 @@ class TestMonitor(unittest.TestCase):
                 {"test": "output6"},
             ],
         }
-        output = monitor.measure_database([("a", "b"), ("c", "d")], None, None, ["q1"])
+        output = monitor.measure_database(test_datasets, mock_client, "container", "image", test_queries)
         self.assertDictEqual(output, expected)
         self.assertEqual(mock_clear.call_count, 2)
