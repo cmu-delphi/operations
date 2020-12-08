@@ -23,6 +23,15 @@
       "add-header-comment": true
     },
 
+    "// subpackage database_metrics",
+    {
+      "type": "copy",
+      "src": "src/database_metrics/",
+      "dst": "../delphi/operations/database_metrics/",
+      "match": "^.*\\.py$",
+      "add-header-comment": true
+    },
+
     "// python secrets for things running on midas",
     {
       "type": "copy",
