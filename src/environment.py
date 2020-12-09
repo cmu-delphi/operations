@@ -9,4 +9,4 @@ class Environment:
   @staticmethod
   def is_prod():
     """Return whether this is running in production."""
-    return socket.gethostname() == 'delphi.midas.cs.cmu.edu'
+    return socket.gethostname() == 'delphi-master-prod-01.delphi.cmu.edu'
