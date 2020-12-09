@@ -32,6 +32,28 @@
       "add-header-comment": true
     },
 
+    "// subpackage screenshots",
+    {
+      "type": "copy",
+      "src": "src/screenshots/",
+      "dst": "../delphi/operations/screenshots/",
+      "match": "^.*\\.py$",
+      "add-header-comment": true
+    },
+    {
+      "type": "copy",
+      "src": "src/screenshots/covidcast/",
+      "dst": "../delphi/operations/screenshots/covidcast/",
+      "match": "^.*\\.py$",
+      "add-header-comment": true
+    },
+    {
+      "type": "copy",
+      "src": "src/screenshots/docker/",
+      "dst": "../delphi/operations/screenshots/docker/",
+      "match": "^Dockerfile$"
+    },
+
     "// python secrets for things running on midas",
     {
       "type": "copy",
