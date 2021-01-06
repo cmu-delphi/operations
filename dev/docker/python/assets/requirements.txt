@@ -9,9 +9,11 @@ mysql-connector
 numpy
 pandas
 pycountry
+pymysql
 requests
 sas7bdat
 scikit-learn
 scipy
 selenium
+sqlalchemy
 xlrd
