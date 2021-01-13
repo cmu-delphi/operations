@@ -10,6 +10,7 @@ numpy
 pandas
 pycountry
 pymysql
+pytest
 requests
 sas7bdat
 scikit-learn
