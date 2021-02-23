@@ -76,7 +76,9 @@ list = ' '.join(dbs)
 print(' Databases: %s'%(list))
 file = 'backup_%s_database.sql'%(tag)
 u, p = secrets.db.backup
-subprocess.check_call('mysqldump --user=%s --password=%s --databases %s > %s/%s'%(u, p, list, dest, file), shell=True)
+# TODO Revert when big tables are gone
+#subprocess.check_call('mysqldump --user=%s --password=%s --databases %s > %s/%s'%(u, p, list, dest, file), shell=True)
+subprocess.check_call('mysqldump --user=%s --password=%s --databases %s --ignore-table=epidata.covidcast2 --ignore-table=epidata.covidcast_legacy > %s/%s' %
 subprocess.check_call('gzip %s/%s'%(dest, file), shell=True)
 file += '.gz'
 print(' %s'%(get_size(file)))
