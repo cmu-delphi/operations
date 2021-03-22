@@ -1,5 +1,6 @@
 aiohttp
 beautifulsoup4
+covidcast
 docker
 dropbox
 epiweeks
