@@ -98,6 +98,10 @@ Note that these images aren't very useful at this point. Each frontend will
 extend and customize these images as necessary to replicate the server's
 environment for that frontend.
 
+To work with the new Python server, you will need the new image specified
+[here](https://github.com/cmu-delphi/delphi-epidata/blob/76cc4c513fe1fa64eede08a6a9202aaa25e0dc1b/dev/docker/python/Dockerfile). See the [CI recipe](https://github.com/cmu-delphi/delphi-epidata/blob/76cc4c513fe1fa64eede08a6a9202aaa25e0dc1b/.github/workflows/ci.yaml#L54) for the latest instructions
+on how to build, test, and run locally.
+
 # test
 
 After the images specific to your frontend have been built, you're ready to
