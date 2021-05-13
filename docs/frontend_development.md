@@ -98,6 +98,15 @@ Note that these images aren't very useful at this point. Each frontend will
 extend and customize these images as necessary to replicate the server's
 environment for that frontend.
 
+The below was written before we switched the delphi-epidata API server to Python/Flask. 
+If you are following this guide in order to develop on delphi-epidata, you should build 
+[this Python image](https://github.com/cmu-delphi/delphi-epidata/blob/76cc4c513fe1fa64eede08a6a9202aaa25e0dc1b/dev/docker/python/Dockerfile)
+as `delphi_web_python` and use it in place of `delphi_python`, and use 
+[this web image](https://github.com/cmu-delphi/delphi-epidata/blob/76cc4c513fe1fa64eede08a6a9202aaa25e0dc1b/devops/Dockerfile)
+for `delphi_epidata_web`.
+See the [CI recipe](https://github.com/cmu-delphi/delphi-epidata/blob/76cc4c513fe1fa64eede08a6a9202aaa25e0dc1b/.github/workflows/ci.yaml#L54) for the latest instructions
+on how to build, test, and run locally.
+
 # test
 
 After the images specific to your frontend have been built, you're ready to
