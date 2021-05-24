@@ -21,6 +21,7 @@ pymysql
 pytest
 python-dotenv==0.15.0
 requests
+tenacity
 sas7bdat
 scikit-learn
 scipy==1.6.2
