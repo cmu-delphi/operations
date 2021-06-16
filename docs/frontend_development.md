@@ -87,11 +87,18 @@ database.
 From the root of your workspace, the images can be built as follows:
 
 ```bash
-docker build -t delphi_web \
-  -f repos/delphi/operations/dev/docker/web/Dockerfile .
-
 docker build -t delphi_database \
   -f repos/delphi/operations/dev/docker/database/Dockerfile .
+docker build -t delphi_python \
+  -f repos/delphi/operations/dev/docker/python/Dockerfile .
+docker build -t delphi_database_epidata \
+  -f ./repos/delphi/delphi-epidata/dev/docker/database/epidata/Dockerfile .
+docker build -t delphi_web_python \
+  -f repos/delphi/delphi-epidata/dev/docker/python/Dockerfile .
+cd ./repos/delphi/delphi-epidata
+docker build -t delphi_web_epidata \
+  -f ./devops/Dockerfile .
+cd ../../../
 ```
 
 Note that these images aren't very useful at this point. Each frontend will
