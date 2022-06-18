@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 
 # install python packages
 COPY repos/delphi/operations/dev/docker/python/assets/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
 
 # copy over all source files
 COPY repos repos
