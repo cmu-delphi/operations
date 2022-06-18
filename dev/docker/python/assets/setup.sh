@@ -12,11 +12,6 @@
 # bail if anything fails
 set -e
 
-# create python package `undefx`
-mkdir undefx
-mv repos/undefx/py3tester/src undefx/py3tester
-mv repos/undefx/undef-analysis undefx/undef_analysis
-
 # create python package `delphi`
 mkdir delphi
 mv repos/delphi/operations/src delphi/operations
