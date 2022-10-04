@@ -19,6 +19,7 @@ pandas==1.2.3
 pycountry
 pymysql
 pytest
+pytest-check
 python-dotenv==0.15.0
 requests
 sas7bdat
